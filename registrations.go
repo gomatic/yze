@@ -1,0 +1,51 @@
+// Package yze is the analyzer catalog for the yze family: it aggregates every
+// yze-<group>-<name> analyzer's registration and filters the set by group and
+// category. The cmd/yze binary drives this catalog through the go-yze runner.
+package yze
+
+import (
+	"slices"
+
+	goyze "github.com/gomatic/go-yze"
+	errconst "github.com/gomatic/yze-go-errconst"
+	gotostmt "github.com/gomatic/yze-go-gotostmt"
+	namedtypes "github.com/gomatic/yze-go-namedtypes"
+)
+
+// Registrations returns every analyzer in the suite, in stable rule-id order.
+func Registrations() []goyze.Registration {
+	return []goyze.Registration{
+		errconst.Registration,
+		gotostmt.Registration,
+		namedtypes.Registration,
+	}
+}
+
+// Filter selects the registrations matching the given group and categories. An
+// empty group matches every group; an empty category set matches every category;
+// a registration matches the category set when it carries any of the categories.
+func Filter(regs []goyze.Registration, group goyze.Group, categories []goyze.Category) []goyze.Registration {
+	out := make([]goyze.Registration, 0, len(regs))
+	for _, r := range regs {
+		if matchesGroup(r, group) && matchesCategories(r, categories) {
+			out = append(out, r)
+		}
+	}
+	return out
+}
+
+func matchesGroup(r goyze.Registration, group goyze.Group) bool {
+	return group == "" || r.Group == group
+}
+
+func matchesCategories(r goyze.Registration, categories []goyze.Category) bool {
+	if len(categories) == 0 {
+		return true
+	}
+	for _, want := range categories {
+		if slices.Contains(r.Categories, want) {
+			return true
+		}
+	}
+	return false
+}

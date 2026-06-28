@@ -1,0 +1,127 @@
+// Command yze runs the gomatic yze analyzer suite over the given package
+// patterns and emits a normalized report (the stickler-json contract by default).
+// It is the aggregator the stickler runner invokes; findings do not by themselves
+// fail the run — that gate belongs to stickler.
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+
+	goyze "github.com/gomatic/go-yze"
+	"github.com/gomatic/yze"
+	"github.com/urfave/cli/v3"
+)
+
+// Injected collaborators, so the command is testable without loading real
+// packages or touching the filesystem.
+var (
+	driver    goyze.Driver     = goyze.CheckerDriver
+	readFile  goyze.FileReader = os.ReadFile
+	writeFile goyze.FileWriter = osWriteFile
+)
+
+// osWriteFile writes data back to an existing file, preserving its mode.
+func osWriteFile(path string, data []byte) error {
+	info, err := os.Stat(path)
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(path, data, info.Mode().Perm())
+}
+
+// osExit is indirected so tests can observe the process exit code.
+var osExit = os.Exit
+
+func main() { osExit(run(os.Args)) }
+
+// run builds and executes the CLI, returning the process exit code.
+func run(args []string) int {
+	if err := createApp().Run(context.Background(), args); err != nil {
+		fmt.Fprintln(os.Stderr, "yze:", err)
+		return 1
+	}
+	return 0
+}
+
+// createApp constructs the yze CLI. The ExitErrHandler is neutralized so Run
+// returns errors to run() rather than exiting the process itself.
+func createApp() *cli.Command {
+	return &cli.Command{
+		Name:           "yze",
+		Usage:          "run the gomatic yze analyzer suite",
+		ArgsUsage:      "[packages...]",
+		ExitErrHandler: func(context.Context, *cli.Command, error) {},
+		Flags: []cli.Flag{
+			&cli.StringFlag{Name: "format", Value: string(yze.FormatSticklerJSON), Usage: "output format (stickler-json, text)"},
+			&cli.BoolFlag{Name: "fix", Usage: "apply suggested fixes in place"},
+			&cli.StringFlag{Name: "group", Usage: "restrict to analyzers in this group"},
+			&cli.StringSliceFlag{Name: "category", Usage: "restrict to analyzers carrying any of these categories"},
+		},
+		Action: action,
+	}
+}
+
+// action runs the filtered analyzers and either applies fixes or emits a report.
+func action(_ context.Context, cmd *cli.Command) error {
+	cfg := configFromCmd(cmd)
+	regs := yze.Filter(yze.Registrations(), cfg.group, cfg.categories)
+	report, err := goyze.Run(driver, regs, cfg.patterns)
+	if err != nil {
+		return err
+	}
+	if cfg.fix {
+		return applyFixes(report)
+	}
+	return yze.Emit(cmd.Writer, cfg.format, report)
+}
+
+// applyFixes applies every suggested fix in the report through the shared engine.
+func applyFixes(report goyze.Report) error {
+	_, err := goyze.ApplyFixes(readFile, writeFile, goyze.GoFormat, allFixes(report))
+	return err
+}
+
+// config is the parsed invocation.
+type config struct {
+	format     yze.Format
+	group      goyze.Group
+	categories []goyze.Category
+	patterns   []string
+	fix        bool
+}
+
+func configFromCmd(cmd *cli.Command) config {
+	return config{
+		format:     yze.Format(cmd.String("format")),
+		group:      goyze.Group(cmd.String("group")),
+		categories: toCategories(cmd.StringSlice("category")),
+		patterns:   patternsOf(cmd.Args().Slice()),
+		fix:        cmd.Bool("fix"),
+	}
+}
+
+func toCategories(values []string) []goyze.Category {
+	out := make([]goyze.Category, 0, len(values))
+	for _, v := range values {
+		out = append(out, goyze.Category(v))
+	}
+	return out
+}
+
+// patternsOf defaults to the current module when no packages are named.
+func patternsOf(args []string) []string {
+	if len(args) == 0 {
+		return []string{"./..."}
+	}
+	return args
+}
+
+func allFixes(report goyze.Report) []goyze.Fix {
+	var fixes []goyze.Fix
+	for _, d := range report.Diagnostics {
+		fixes = append(fixes, d.Fixes...)
+	}
+	return fixes
+}
