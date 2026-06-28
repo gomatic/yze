@@ -7,6 +7,7 @@ import (
 	"slices"
 
 	goyze "github.com/gomatic/go-yze"
+	anonstruct "github.com/gomatic/yze-go-anonstruct"
 	errconst "github.com/gomatic/yze-go-errconst"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
 	namedtypes "github.com/gomatic/yze-go-namedtypes"
@@ -15,6 +16,7 @@ import (
 // Registrations returns every analyzer in the suite, in stable rule-id order.
 func Registrations() []goyze.Registration {
 	return []goyze.Registration{
+		anonstruct.Registration,
 		errconst.Registration,
 		gotostmt.Registration,
 		namedtypes.Registration,

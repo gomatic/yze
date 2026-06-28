@@ -4,6 +4,8 @@ github.com/gomatic/go-error v0.3.0 h1:RTmlkCRDSaIaqhDK2VCKWiiiCRDI0Egesv/EoJLWta
 github.com/gomatic/go-error v0.3.0/go.mod h1:+PAmcazlzCIDFBglesekV1LUQTEaQB+5801gftMxgZY=
 github.com/gomatic/go-yze v0.1.0 h1:7ChFR6tGvcAbuhUnrSNHu3OJ/UDwsjfgmpJ/c9bEcB8=
 github.com/gomatic/go-yze v0.1.0/go.mod h1:II5yr/hDyoSTDqFoUvLAatPPXyx3dnOXXT/C7Y7h+Qc=
+github.com/gomatic/yze-go-anonstruct v0.1.0 h1:WR0TYfjQ1R953vKO2HkZcARvgXsLs5ZVgMKIMkdnKvc=
+github.com/gomatic/yze-go-anonstruct v0.1.0/go.mod h1:c3ms+7748+tidxU+Icw3ZoQdnOh/8Z9kvlrYzW0pcxE=
 github.com/gomatic/yze-go-errconst v0.1.0 h1:nGbH3HLQjwpp9jEilMaXRaWirTQviTLschfVaj3XYjs=
 github.com/gomatic/yze-go-errconst v0.1.0/go.mod h1:M2YfEaNP8vpCSNb2Y0t9jbKQP02okQoV9luMz2d+bm8=
 github.com/gomatic/yze-go-gotostmt v0.1.0 h1:/xT3OgH6GDW9hQvmjUDigUoon2Tq4SJvHVCphNN0OZA=
