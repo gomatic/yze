@@ -20,14 +20,14 @@ func ruleIDs(regs []goyze.Registration) []string {
 func TestRegistrationsCatalog(t *testing.T) {
 	regs := yze.Registrations()
 
-	assert.Equal(t, []string{"yze/go/anonstruct", "yze/go/errconst", "yze/go/gotostmt", "yze/go/namedtypes"}, ruleIDs(regs))
+	assert.Equal(t, []string{"yze/go/anonstruct", "yze/go/emptyiface", "yze/go/errconst", "yze/go/gotostmt", "yze/go/namedtypes"}, ruleIDs(regs))
 	for _, r := range regs {
 		require.NoError(t, r.Validate())
 	}
 }
 
 func TestFilterByGroupKeepsMatching(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), "go", nil), 4)
+	assert.Len(t, yze.Filter(yze.Registrations(), "go", nil), 5)
 	assert.Empty(t, yze.Filter(yze.Registrations(), "sql", nil))
 }
 
@@ -42,5 +42,5 @@ func TestFilterByMultipleCategories(t *testing.T) {
 }
 
 func TestFilterWithNoConstraintsKeepsAll(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), "", nil), 4)
+	assert.Len(t, yze.Filter(yze.Registrations(), "", nil), 5)
 }

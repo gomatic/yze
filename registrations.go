@@ -8,6 +8,7 @@ import (
 
 	goyze "github.com/gomatic/go-yze"
 	anonstruct "github.com/gomatic/yze-go-anonstruct"
+	emptyiface "github.com/gomatic/yze-go-emptyiface"
 	errconst "github.com/gomatic/yze-go-errconst"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
 	namedtypes "github.com/gomatic/yze-go-namedtypes"
@@ -17,6 +18,7 @@ import (
 func Registrations() []goyze.Registration {
 	return []goyze.Registration{
 		anonstruct.Registration,
+		emptyiface.Registration,
 		errconst.Registration,
 		gotostmt.Registration,
 		namedtypes.Registration,
