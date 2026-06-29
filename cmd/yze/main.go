@@ -58,7 +58,11 @@ func createApp() *cli.Command {
 		ArgsUsage:      "[packages...]",
 		ExitErrHandler: func(context.Context, *cli.Command, error) {},
 		Flags: []cli.Flag{
-			&cli.StringFlag{Name: "format", Value: string(yze.FormatSticklerJSON), Usage: "output format (stickler-json, text)"},
+			&cli.StringFlag{
+				Name:  "format",
+				Value: string(yze.FormatSticklerJSON),
+				Usage: "output format (stickler-json, text)",
+			},
 			&cli.BoolFlag{Name: "fix", Usage: "apply suggested fixes in place"},
 			&cli.StringSliceFlag{Name: "category", Usage: "restrict to analyzers carrying any of these categories"},
 			&cli.StringFlag{Name: "config", Usage: "path to a yze config file (per-analyzer settings)"},

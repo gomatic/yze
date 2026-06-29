@@ -19,7 +19,15 @@ func (failWriter) Write([]byte) (int, error) { return 0, errs.Const("io fail") }
 
 func reportFixture() goyze.Report {
 	return goyze.Report{Diagnostics: []goyze.Diagnostic{
-		{Tool: "yze", Rule: "yze/gotostmt", Path: "a.go", Line: 3, Col: 2, Severity: goyze.SeverityError, Message: "goto is not permitted"},
+		{
+			Tool:     "yze",
+			Rule:     "yze/gotostmt",
+			Path:     "a.go",
+			Line:     3,
+			Col:      2,
+			Severity: goyze.SeverityError,
+			Message:  "goto is not permitted",
+		},
 	}}
 }
 

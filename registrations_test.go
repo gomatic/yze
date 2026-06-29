@@ -21,7 +21,26 @@ func ruleIDs(regs []goyze.Registration) []string {
 func TestRegistrationsCatalog(t *testing.T) {
 	regs := yze.Registrations()
 
-	assert.Equal(t, []string{"yze/anonstruct", "yze/boolname", "yze/ctxfirst", "yze/emptyiface", "yze/errconst", "yze/errlast", "yze/gotostmt", "yze/layout", "yze/namedtypes", "yze/pkgstd", "yze/ptrparam", "yze/ptrrecv", "yze/stdlog", "yze/testfile"}, ruleIDs(regs))
+	assert.Equal(
+		t,
+		[]string{
+			"yze/anonstruct",
+			"yze/boolname",
+			"yze/ctxfirst",
+			"yze/emptyiface",
+			"yze/errconst",
+			"yze/errlast",
+			"yze/gotostmt",
+			"yze/layout",
+			"yze/namedtypes",
+			"yze/pkgstd",
+			"yze/ptrparam",
+			"yze/ptrrecv",
+			"yze/stdlog",
+			"yze/testfile",
+		},
+		ruleIDs(regs),
+	)
 	for _, r := range regs {
 		require.NoError(t, r.Validate())
 	}
