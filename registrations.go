@@ -1,6 +1,6 @@
 // Package yze is the analyzer catalog for the yze family: it aggregates every
-// yze-<group>-<name> analyzer's registration and filters the set by group and
-// category. The cmd/yze binary drives this catalog through the go-yze runner.
+// yze-<name> analyzer's registration and filters the set by category. The
+// cmd/yze binary drives this catalog through the go-yze runner.
 package yze
 
 import (
