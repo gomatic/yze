@@ -95,7 +95,7 @@ type config struct {
 	format     yze.Format
 	config     string
 	categories []goyze.Category
-	patterns   []string
+	patterns   []goyze.Pattern
 	fix        bool
 }
 
@@ -130,11 +130,15 @@ func toCategories(values []string) []goyze.Category {
 }
 
 // patternsOf defaults to the current module when no packages are named.
-func patternsOf(args []string) []string {
+func patternsOf(args []string) []goyze.Pattern {
 	if len(args) == 0 {
-		return []string{"./..."}
+		return []goyze.Pattern{"./..."}
 	}
-	return args
+	patterns := make([]goyze.Pattern, 0, len(args))
+	for _, a := range args {
+		patterns = append(patterns, goyze.Pattern(a))
+	}
+	return patterns
 }
 
 func allFixes(report goyze.Report) []goyze.Fix {

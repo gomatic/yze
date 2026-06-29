@@ -39,7 +39,7 @@ func sampleReg() goyze.Registration {
 // reportDriver returns one diagnostic with no fix.
 func reportDriver(t *testing.T) goyze.Driver {
 	fset, f := fileSet(t)
-	return func(_ []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
+	return func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
 		return fset, []goyze.DriverResult{{
 			Registration: sampleReg(),
 			Diagnostics:  []analysis.Diagnostic{{Pos: f.Pos(0), Message: "boom"}},
@@ -77,7 +77,7 @@ func TestActionEmitsSticklerJSONByDefault(t *testing.T) {
 
 func TestActionAppliesCategoryFilter(t *testing.T) {
 	var captured []goyze.Registration
-	swapDriver(t, func(regs []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
+	swapDriver(t, func(regs []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
 		captured = regs
 		return token.NewFileSet(), nil, nil
 	})
@@ -90,8 +90,8 @@ func TestActionAppliesCategoryFilter(t *testing.T) {
 }
 
 func TestActionPassesExplicitPatterns(t *testing.T) {
-	var captured []string
-	swapDriver(t, func(_ []goyze.Registration, patterns []string) (*token.FileSet, []goyze.DriverResult, error) {
+	var captured []goyze.Pattern
+	swapDriver(t, func(_ []goyze.Registration, patterns []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
 		captured = patterns
 		return token.NewFileSet(), nil, nil
 	})
@@ -99,11 +99,11 @@ func TestActionPassesExplicitPatterns(t *testing.T) {
 	_, err := runApp(t, appName, "./foo/...")
 
 	require.NoError(t, err)
-	assert.Equal(t, []string{"./foo/..."}, captured)
+	assert.Equal(t, []goyze.Pattern{"./foo/..."}, captured)
 }
 
 func TestActionReturnsDriverError(t *testing.T) {
-	swapDriver(t, func(_ []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
+	swapDriver(t, func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
 		return nil, nil, errs.Const("driver boom")
 	})
 
@@ -130,7 +130,7 @@ func TestActionFixWithNoFixesSucceeds(t *testing.T) {
 
 func TestActionFixPropagatesApplyError(t *testing.T) {
 	fset, f := fileSet(t)
-	swapDriver(t, func(_ []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
+	swapDriver(t, func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
 		return fset, []goyze.DriverResult{{
 			Registration: sampleReg(),
 			Diagnostics: []analysis.Diagnostic{{
@@ -153,7 +153,7 @@ func TestActionFixPropagatesApplyError(t *testing.T) {
 }
 
 func TestRunReturnsZeroOnSuccessAndOneOnError(t *testing.T) {
-	swapDriver(t, func(_ []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
+	swapDriver(t, func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
 		return token.NewFileSet(), nil, nil
 	})
 
@@ -174,7 +174,7 @@ func TestOSWriteFilePreservesAndRejectsMissing(t *testing.T) {
 }
 
 func TestMainExits(t *testing.T) {
-	swapDriver(t, func(_ []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
+	swapDriver(t, func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
 		return token.NewFileSet(), nil, nil
 	})
 	originalExit, originalArgs := osExit, os.Args
@@ -202,7 +202,7 @@ func swapReadFile(t *testing.T, content string, err error) {
 }
 
 func emptyDriver() goyze.Driver {
-	return func(_ []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
+	return func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
 		return token.NewFileSet(), nil, nil
 	}
 }

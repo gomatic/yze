@@ -2,8 +2,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gomatic/go-error v0.3.0 h1:RTmlkCRDSaIaqhDK2VCKWiiiCRDI0Egesv/EoJLWtaI=
 github.com/gomatic/go-error v0.3.0/go.mod h1:+PAmcazlzCIDFBglesekV1LUQTEaQB+5801gftMxgZY=
-github.com/gomatic/go-yze v0.3.0 h1:dQLlLmLJNUDYPPoCZmoLLDPqIFCPWnimZeJjYNtJfF4=
-github.com/gomatic/go-yze v0.3.0/go.mod h1:II5yr/hDyoSTDqFoUvLAatPPXyx3dnOXXT/C7Y7h+Qc=
+github.com/gomatic/go-yze v0.4.0 h1:HqJUz0LuU3H86BJ5QQLsJsege7L5OHoCbL71bFDIITk=
+github.com/gomatic/go-yze v0.4.0/go.mod h1:II5yr/hDyoSTDqFoUvLAatPPXyx3dnOXXT/C7Y7h+Qc=
 github.com/gomatic/yze-anonstruct v0.1.0 h1:xuS5IPFUatc1AMooEC10JFHe7rvi3ajPKIhuXQxPUrU=
 github.com/gomatic/yze-anonstruct v0.1.0/go.mod h1:cKekOTFTdTmiu+mz3EA8tx3GE849c41rYRCT2Yc7GR4=
 github.com/gomatic/yze-boolname v0.1.0 h1:ZzL45ehcDdMIsejjbAtrrtQgnZ4l83g7xvOGVA8fJDY=

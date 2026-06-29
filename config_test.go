@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	errs "github.com/gomatic/go-error"
+	goyze "github.com/gomatic/go-yze"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -19,7 +20,9 @@ func TestLoadConfigParsesAnalyzerSettings(t *testing.T) {
 	settings, err := yze.LoadConfig(read, "yze.yaml")
 
 	require.NoError(t, err)
-	assert.Equal(t, "pkg.Foo,pkg.Bar", settings["ptrrecv"]["allow"])
+	assert.Equal(t, goyze.Settings{
+		"ptrrecv": goyze.AnalyzerSettings{"allow": "pkg.Foo,pkg.Bar"},
+	}, settings)
 }
 
 func TestLoadConfigReportsReadError(t *testing.T) {
