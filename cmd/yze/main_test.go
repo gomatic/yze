@@ -56,6 +56,13 @@ func runApp(t *testing.T, args ...string) (string, error) {
 	return buf.String(), err
 }
 
+func TestVersionFlagReportsVersion(t *testing.T) {
+	out, err := runApp(t, appName, "--version")
+
+	require.NoError(t, err)
+	assert.Contains(t, out, version)
+}
+
 func TestActionEmitsTextFormat(t *testing.T) {
 	swapDriver(t, reportDriver(t))
 

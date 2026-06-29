@@ -35,6 +35,11 @@ func osWriteFile(path string, data []byte) error {
 // appName is the CLI name.
 const appName = "yze"
 
+// version is the application version, exposed via --version. It defaults to "dev"
+// and is overwritten at build time via ldflags: -X main.version={{.Version}}
+// (see .goreleaser.yml).
+var version = "dev"
+
 // osExit is indirected so tests can observe the process exit code.
 var osExit = os.Exit
 
@@ -54,6 +59,7 @@ func run(args []string) int {
 func createApp() *cli.Command {
 	return &cli.Command{
 		Name:           appName,
+		Version:        version,
 		Usage:          "run the gomatic yze analyzer suite",
 		ArgsUsage:      "[packages...]",
 		ExitErrHandler: func(context.Context, *cli.Command, error) {},
