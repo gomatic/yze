@@ -83,7 +83,7 @@ func TestActionAppliesGroupFilter(t *testing.T) {
 
 	_, err := runApp(t, "yze", "--group", "go")
 	require.NoError(t, err)
-	assert.Len(t, captured, 10)
+	assert.Len(t, captured, 14)
 
 	_, err = runApp(t, "yze", "--group", "sql")
 	require.NoError(t, err)
@@ -100,7 +100,7 @@ func TestActionAppliesCategoryFilter(t *testing.T) {
 	_, err := runApp(t, "yze", "--category", "errors")
 
 	require.NoError(t, err)
-	require.Len(t, captured, 1)
+	require.Len(t, captured, 2)
 	assert.Equal(t, "yze/go/errconst", captured[0].RuleID())
 }
 

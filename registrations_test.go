@@ -20,27 +20,27 @@ func ruleIDs(regs []goyze.Registration) []string {
 func TestRegistrationsCatalog(t *testing.T) {
 	regs := yze.Registrations()
 
-	assert.Equal(t, []string{"yze/go/anonstruct", "yze/go/boolname", "yze/go/emptyiface", "yze/go/errconst", "yze/go/gotostmt", "yze/go/layout", "yze/go/namedtypes", "yze/go/pkgstd", "yze/go/ptrparam", "yze/go/ptrrecv"}, ruleIDs(regs))
+	assert.Equal(t, []string{"yze/go/anonstruct", "yze/go/boolname", "yze/go/ctxfirst", "yze/go/emptyiface", "yze/go/errconst", "yze/go/errlast", "yze/go/gotostmt", "yze/go/layout", "yze/go/namedtypes", "yze/go/pkgstd", "yze/go/ptrparam", "yze/go/ptrrecv", "yze/go/stdlog", "yze/go/testfile"}, ruleIDs(regs))
 	for _, r := range regs {
 		require.NoError(t, r.Validate())
 	}
 }
 
 func TestFilterByGroupKeepsMatching(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), "go", nil), 10)
+	assert.Len(t, yze.Filter(yze.Registrations(), "go", nil), 14)
 	assert.Empty(t, yze.Filter(yze.Registrations(), "sql", nil))
 }
 
 func TestFilterByCategorySelectsMatching(t *testing.T) {
 	got := yze.Filter(yze.Registrations(), "", []goyze.Category{"errors"})
-	assert.Equal(t, []string{"yze/go/errconst"}, ruleIDs(got))
+	assert.Equal(t, []string{"yze/go/errconst", "yze/go/errlast"}, ruleIDs(got))
 }
 
 func TestFilterByMultipleCategories(t *testing.T) {
 	got := yze.Filter(yze.Registrations(), "", []goyze.Category{"errors", "patterns"})
-	assert.Equal(t, []string{"yze/go/errconst", "yze/go/gotostmt"}, ruleIDs(got))
+	assert.Equal(t, []string{"yze/go/ctxfirst", "yze/go/errconst", "yze/go/errlast", "yze/go/gotostmt"}, ruleIDs(got))
 }
 
 func TestFilterWithNoConstraintsKeepsAll(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), "", nil), 10)
+	assert.Len(t, yze.Filter(yze.Registrations(), "", nil), 14)
 }
