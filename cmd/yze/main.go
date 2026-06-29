@@ -58,6 +58,7 @@ func createApp() *cli.Command {
 			&cli.BoolFlag{Name: "fix", Usage: "apply suggested fixes in place"},
 			&cli.StringFlag{Name: "group", Usage: "restrict to analyzers in this group"},
 			&cli.StringSliceFlag{Name: "category", Usage: "restrict to analyzers carrying any of these categories"},
+			&cli.StringFlag{Name: "config", Usage: "path to a yze config file (per-analyzer settings)"},
 		},
 		Action: action,
 	}
@@ -67,6 +68,9 @@ func createApp() *cli.Command {
 func action(_ context.Context, cmd *cli.Command) error {
 	cfg := configFromCmd(cmd)
 	regs := yze.Filter(yze.Registrations(), cfg.group, cfg.categories)
+	if err := configure(regs, cfg.config); err != nil {
+		return err
+	}
 	report, err := goyze.Run(driver, regs, cfg.patterns)
 	if err != nil {
 		return err
@@ -89,6 +93,7 @@ type config struct {
 	group      goyze.Group
 	categories []goyze.Category
 	patterns   []string
+	config     string
 	fix        bool
 }
 
@@ -98,8 +103,21 @@ func configFromCmd(cmd *cli.Command) config {
 		group:      goyze.Group(cmd.String("group")),
 		categories: toCategories(cmd.StringSlice("category")),
 		patterns:   patternsOf(cmd.Args().Slice()),
+		config:     cmd.String("config"),
 		fix:        cmd.Bool("fix"),
 	}
+}
+
+// configure applies per-analyzer settings from the config file, if one is given.
+func configure(regs []goyze.Registration, path string) error {
+	if path == "" {
+		return nil
+	}
+	settings, err := yze.LoadConfig(readFile, path)
+	if err != nil {
+		return err
+	}
+	return goyze.ApplyConfig(regs, settings)
 }
 
 func toCategories(values []string) []goyze.Category {

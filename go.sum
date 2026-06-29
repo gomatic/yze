@@ -2,8 +2,8 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gomatic/go-error v0.3.0 h1:RTmlkCRDSaIaqhDK2VCKWiiiCRDI0Egesv/EoJLWtaI=
 github.com/gomatic/go-error v0.3.0/go.mod h1:+PAmcazlzCIDFBglesekV1LUQTEaQB+5801gftMxgZY=
-github.com/gomatic/go-yze v0.1.0 h1:7ChFR6tGvcAbuhUnrSNHu3OJ/UDwsjfgmpJ/c9bEcB8=
-github.com/gomatic/go-yze v0.1.0/go.mod h1:II5yr/hDyoSTDqFoUvLAatPPXyx3dnOXXT/C7Y7h+Qc=
+github.com/gomatic/go-yze v0.2.0 h1:muMPoAbg4zkVSfvUtT1K3L1KKr3m5+0p7p2Du8GWYYs=
+github.com/gomatic/go-yze v0.2.0/go.mod h1:II5yr/hDyoSTDqFoUvLAatPPXyx3dnOXXT/C7Y7h+Qc=
 github.com/gomatic/yze-go-anonstruct v0.1.0 h1:WR0TYfjQ1R953vKO2HkZcARvgXsLs5ZVgMKIMkdnKvc=
 github.com/gomatic/yze-go-anonstruct v0.1.0/go.mod h1:c3ms+7748+tidxU+Icw3ZoQdnOh/8Z9kvlrYzW0pcxE=
 github.com/gomatic/yze-go-boolname v0.1.0 h1:A0m5JwxkYiT4CMDrAJ+GuaZ/mDE/nEdct/85YOejjW0=
@@ -20,10 +20,10 @@ github.com/gomatic/yze-go-namedtypes v0.1.0 h1:45Wd1d5ZVNCx40LXNBnPRek/HqlRTNKFT
 github.com/gomatic/yze-go-namedtypes v0.1.0/go.mod h1:nr7EuOiLkJbfL8KVzvuEYRHXAZYQDl0QsJfjsiRMN7s=
 github.com/gomatic/yze-go-pkgstd v0.1.0 h1:WSgOeTaDs35mgwKGo0zyRZDf0pG3PimJY96udCKH/T4=
 github.com/gomatic/yze-go-pkgstd v0.1.0/go.mod h1:4sni++3hEfLTUwDV0dwFZUjbGVxGSJw7a8E/abiFJkE=
-github.com/gomatic/yze-go-ptrparam v0.1.0 h1:CUum1r+pJQ1ssfcwIDsL586FgmoLz1oTEfAn31WF2w4=
-github.com/gomatic/yze-go-ptrparam v0.1.0/go.mod h1:3fZdVkAKw5BnM4w6ZrpvfFP4EtdGszr297FTmxuObDc=
-github.com/gomatic/yze-go-ptrrecv v0.1.0 h1:GKq874rYZtvIgOQAb+15+yucVkzQ+gIg3y0w6jXEXGY=
-github.com/gomatic/yze-go-ptrrecv v0.1.0/go.mod h1:r0c6befaBcwZvtv3TH2dMEx0721FoJ72IrhYI85Y+y0=
+github.com/gomatic/yze-go-ptrparam v0.2.0 h1:OTZ2f4DXSO7gTFBU5x85Au8dyFcx+RLRqi4cQZTLzk4=
+github.com/gomatic/yze-go-ptrparam v0.2.0/go.mod h1:3fZdVkAKw5BnM4w6ZrpvfFP4EtdGszr297FTmxuObDc=
+github.com/gomatic/yze-go-ptrrecv v0.2.0 h1:i9EsGfgUJDjf2KshHBoswkDNKIIlCsmsKaAdGNVkAzw=
+github.com/gomatic/yze-go-ptrrecv v0.2.0/go.mod h1:r0c6befaBcwZvtv3TH2dMEx0721FoJ72IrhYI85Y+y0=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
 github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

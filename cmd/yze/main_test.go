@@ -9,6 +9,7 @@ import (
 
 	errs "github.com/gomatic/go-error"
 	goyze "github.com/gomatic/go-yze"
+	"github.com/gomatic/yze"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/tools/go/analysis"
@@ -201,4 +202,56 @@ func TestMainExits(t *testing.T) {
 	main()
 
 	assert.Equal(t, 0, code)
+}
+
+func swapReadFile(t *testing.T, content string, err error) {
+	t.Helper()
+	original := readFile
+	t.Cleanup(func() { readFile = original })
+	readFile = func(string) ([]byte, error) {
+		if err != nil {
+			return nil, err
+		}
+		return []byte(content), nil
+	}
+}
+
+func emptyDriver() goyze.Driver {
+	return func(_ []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
+		return token.NewFileSet(), nil, nil
+	}
+}
+
+func TestActionAppliesConfigFile(t *testing.T) {
+	swapDriver(t, emptyDriver())
+	swapReadFile(t, "analyzers:\n  ptrrecv:\n    allow:\n      - pkg.Foo\n", nil)
+	t.Cleanup(func() {
+		for _, reg := range yze.Registrations() {
+			if reg.Name == "ptrrecv" {
+				_ = reg.Analyzer.Flags.Set("allow", "")
+			}
+		}
+	})
+
+	_, err := runApp(t, "yze", "--config", "yze.yaml")
+
+	require.NoError(t, err)
+}
+
+func TestActionReportsConfigLoadError(t *testing.T) {
+	swapDriver(t, emptyDriver())
+	swapReadFile(t, "", errs.Const("no config file"))
+
+	_, err := runApp(t, "yze", "--config", "missing.yaml")
+
+	require.Error(t, err)
+}
+
+func TestActionReportsConfigApplyError(t *testing.T) {
+	swapDriver(t, emptyDriver())
+	swapReadFile(t, "analyzers:\n  ptrrecv:\n    nope:\n      - x\n", nil)
+
+	_, err := runApp(t, "yze", "--config", "yze.yaml")
+
+	require.Error(t, err)
 }
