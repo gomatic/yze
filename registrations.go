@@ -13,6 +13,7 @@ import (
 	errconst "github.com/gomatic/yze-go-errconst"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
 	namedtypes "github.com/gomatic/yze-go-namedtypes"
+	pkgstd "github.com/gomatic/yze-go-pkgstd"
 	ptrparam "github.com/gomatic/yze-go-ptrparam"
 	ptrrecv "github.com/gomatic/yze-go-ptrrecv"
 )
@@ -26,6 +27,7 @@ func Registrations() []goyze.Registration {
 		errconst.Registration,
 		gotostmt.Registration,
 		namedtypes.Registration,
+		pkgstd.Registration,
 		ptrparam.Registration,
 		ptrrecv.Registration,
 	}

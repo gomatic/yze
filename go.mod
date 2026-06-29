@@ -18,6 +18,7 @@ require (
 	github.com/gomatic/yze-go-anonstruct v0.1.0
 	github.com/gomatic/yze-go-boolname v0.1.0
 	github.com/gomatic/yze-go-emptyiface v0.1.0
+	github.com/gomatic/yze-go-pkgstd v0.1.0
 	github.com/gomatic/yze-go-ptrparam v0.1.0
 	github.com/gomatic/yze-go-ptrrecv v0.1.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect

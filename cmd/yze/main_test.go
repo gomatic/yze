@@ -82,7 +82,7 @@ func TestActionAppliesGroupFilter(t *testing.T) {
 
 	_, err := runApp(t, "yze", "--group", "go")
 	require.NoError(t, err)
-	assert.Len(t, captured, 8)
+	assert.Len(t, captured, 9)
 
 	_, err = runApp(t, "yze", "--group", "sql")
 	require.NoError(t, err)
