@@ -14,6 +14,8 @@ github.com/gomatic/yze-go-errconst v0.1.0 h1:nGbH3HLQjwpp9jEilMaXRaWirTQviTLschf
 github.com/gomatic/yze-go-errconst v0.1.0/go.mod h1:M2YfEaNP8vpCSNb2Y0t9jbKQP02okQoV9luMz2d+bm8=
 github.com/gomatic/yze-go-gotostmt v0.1.0 h1:/xT3OgH6GDW9hQvmjUDigUoon2Tq4SJvHVCphNN0OZA=
 github.com/gomatic/yze-go-gotostmt v0.1.0/go.mod h1:IpIU9xZCTdxa1uVV2GvID+JZnd2EM8wzyI0D3OTakQg=
+github.com/gomatic/yze-go-layout v0.1.0 h1:TO70jd2npODeOCSVEu8yYIjLkwEJqFoMo0OkZAXVDCA=
+github.com/gomatic/yze-go-layout v0.1.0/go.mod h1:j/GBilH+AywMIeiIugbN3+90FcJqT0ERPYYHsgNKr9w=
 github.com/gomatic/yze-go-namedtypes v0.1.0 h1:45Wd1d5ZVNCx40LXNBnPRek/HqlRTNKFTFzythzao6c=
 github.com/gomatic/yze-go-namedtypes v0.1.0/go.mod h1:nr7EuOiLkJbfL8KVzvuEYRHXAZYQDl0QsJfjsiRMN7s=
 github.com/gomatic/yze-go-pkgstd v0.1.0 h1:WSgOeTaDs35mgwKGo0zyRZDf0pG3PimJY96udCKH/T4=

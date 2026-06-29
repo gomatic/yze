@@ -12,6 +12,7 @@ import (
 	emptyiface "github.com/gomatic/yze-go-emptyiface"
 	errconst "github.com/gomatic/yze-go-errconst"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
+	layout "github.com/gomatic/yze-go-layout"
 	namedtypes "github.com/gomatic/yze-go-namedtypes"
 	pkgstd "github.com/gomatic/yze-go-pkgstd"
 	ptrparam "github.com/gomatic/yze-go-ptrparam"
@@ -26,6 +27,7 @@ func Registrations() []goyze.Registration {
 		emptyiface.Registration,
 		errconst.Registration,
 		gotostmt.Registration,
+		layout.Registration,
 		namedtypes.Registration,
 		pkgstd.Registration,
 		ptrparam.Registration,
