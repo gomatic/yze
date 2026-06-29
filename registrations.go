@@ -8,20 +8,26 @@ import (
 
 	goyze "github.com/gomatic/go-yze"
 	anonstruct "github.com/gomatic/yze-go-anonstruct"
+	boolname "github.com/gomatic/yze-go-boolname"
 	emptyiface "github.com/gomatic/yze-go-emptyiface"
 	errconst "github.com/gomatic/yze-go-errconst"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
 	namedtypes "github.com/gomatic/yze-go-namedtypes"
+	ptrparam "github.com/gomatic/yze-go-ptrparam"
+	ptrrecv "github.com/gomatic/yze-go-ptrrecv"
 )
 
 // Registrations returns every analyzer in the suite, in stable rule-id order.
 func Registrations() []goyze.Registration {
 	return []goyze.Registration{
 		anonstruct.Registration,
+		boolname.Registration,
 		emptyiface.Registration,
 		errconst.Registration,
 		gotostmt.Registration,
 		namedtypes.Registration,
+		ptrparam.Registration,
+		ptrrecv.Registration,
 	}
 }
 

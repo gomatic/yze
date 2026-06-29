@@ -16,7 +16,10 @@ require (
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/gomatic/yze-go-anonstruct v0.1.0
+	github.com/gomatic/yze-go-boolname v0.1.0
 	github.com/gomatic/yze-go-emptyiface v0.1.0
+	github.com/gomatic/yze-go-ptrparam v0.1.0
+	github.com/gomatic/yze-go-ptrrecv v0.1.0
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/mod v0.37.0 // indirect
 	golang.org/x/sync v0.21.0 // indirect
