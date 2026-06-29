@@ -7,20 +7,20 @@ import (
 	"slices"
 
 	goyze "github.com/gomatic/go-yze"
-	anonstruct "github.com/gomatic/yze-go-anonstruct"
-	boolname "github.com/gomatic/yze-go-boolname"
-	ctxfirst "github.com/gomatic/yze-go-ctxfirst"
-	emptyiface "github.com/gomatic/yze-go-emptyiface"
-	errconst "github.com/gomatic/yze-go-errconst"
-	errlast "github.com/gomatic/yze-go-errlast"
-	gotostmt "github.com/gomatic/yze-go-gotostmt"
-	layout "github.com/gomatic/yze-go-layout"
-	namedtypes "github.com/gomatic/yze-go-namedtypes"
-	pkgstd "github.com/gomatic/yze-go-pkgstd"
-	ptrparam "github.com/gomatic/yze-go-ptrparam"
-	ptrrecv "github.com/gomatic/yze-go-ptrrecv"
-	stdlog "github.com/gomatic/yze-go-stdlog"
-	testfile "github.com/gomatic/yze-go-testfile"
+	anonstruct "github.com/gomatic/yze-anonstruct"
+	boolname "github.com/gomatic/yze-boolname"
+	ctxfirst "github.com/gomatic/yze-ctxfirst"
+	emptyiface "github.com/gomatic/yze-emptyiface"
+	errconst "github.com/gomatic/yze-errconst"
+	errlast "github.com/gomatic/yze-errlast"
+	gotostmt "github.com/gomatic/yze-gotostmt"
+	layout "github.com/gomatic/yze-layout"
+	namedtypes "github.com/gomatic/yze-namedtypes"
+	pkgstd "github.com/gomatic/yze-pkgstd"
+	ptrparam "github.com/gomatic/yze-ptrparam"
+	ptrrecv "github.com/gomatic/yze-ptrrecv"
+	stdlog "github.com/gomatic/yze-stdlog"
+	testfile "github.com/gomatic/yze-testfile"
 )
 
 // Registrations returns every analyzer in the suite, in stable rule-id order.
@@ -43,21 +43,17 @@ func Registrations() []goyze.Registration {
 	}
 }
 
-// Filter selects the registrations matching the given group and categories. An
-// empty group matches every group; an empty category set matches every category;
-// a registration matches the category set when it carries any of the categories.
-func Filter(regs []goyze.Registration, group goyze.Group, categories []goyze.Category) []goyze.Registration {
+// Filter selects the registrations matching the given categories. An empty
+// category set matches every analyzer; otherwise a registration matches when it
+// carries any of the categories.
+func Filter(regs []goyze.Registration, categories []goyze.Category) []goyze.Registration {
 	out := make([]goyze.Registration, 0, len(regs))
 	for _, r := range regs {
-		if matchesGroup(r, group) && matchesCategories(r, categories) {
+		if matchesCategories(r, categories) {
 			out = append(out, r)
 		}
 	}
 	return out
-}
-
-func matchesGroup(r goyze.Registration, group goyze.Group) bool {
-	return group == "" || r.Group == group
 }
 
 func matchesCategories(r goyze.Registration, categories []goyze.Category) bool {

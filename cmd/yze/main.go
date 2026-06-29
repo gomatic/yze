@@ -10,8 +10,9 @@ import (
 	"os"
 
 	goyze "github.com/gomatic/go-yze"
-	"github.com/gomatic/yze"
 	"github.com/urfave/cli/v3"
+
+	"github.com/gomatic/yze"
 )
 
 // Injected collaborators, so the command is testable without loading real
@@ -31,6 +32,9 @@ func osWriteFile(path string, data []byte) error {
 	return os.WriteFile(path, data, info.Mode().Perm())
 }
 
+// appName is the CLI name.
+const appName = "yze"
+
 // osExit is indirected so tests can observe the process exit code.
 var osExit = os.Exit
 
@@ -39,7 +43,7 @@ func main() { osExit(run(os.Args)) }
 // run builds and executes the CLI, returning the process exit code.
 func run(args []string) int {
 	if err := createApp().Run(context.Background(), args); err != nil {
-		fmt.Fprintln(os.Stderr, "yze:", err)
+		_, _ = fmt.Fprintln(os.Stderr, appName+":", err)
 		return 1
 	}
 	return 0
@@ -49,14 +53,13 @@ func run(args []string) int {
 // returns errors to run() rather than exiting the process itself.
 func createApp() *cli.Command {
 	return &cli.Command{
-		Name:           "yze",
+		Name:           appName,
 		Usage:          "run the gomatic yze analyzer suite",
 		ArgsUsage:      "[packages...]",
 		ExitErrHandler: func(context.Context, *cli.Command, error) {},
 		Flags: []cli.Flag{
 			&cli.StringFlag{Name: "format", Value: string(yze.FormatSticklerJSON), Usage: "output format (stickler-json, text)"},
 			&cli.BoolFlag{Name: "fix", Usage: "apply suggested fixes in place"},
-			&cli.StringFlag{Name: "group", Usage: "restrict to analyzers in this group"},
 			&cli.StringSliceFlag{Name: "category", Usage: "restrict to analyzers carrying any of these categories"},
 			&cli.StringFlag{Name: "config", Usage: "path to a yze config file (per-analyzer settings)"},
 		},
@@ -67,7 +70,7 @@ func createApp() *cli.Command {
 // action runs the filtered analyzers and either applies fixes or emits a report.
 func action(_ context.Context, cmd *cli.Command) error {
 	cfg := configFromCmd(cmd)
-	regs := yze.Filter(yze.Registrations(), cfg.group, cfg.categories)
+	regs := yze.Filter(yze.Registrations(), cfg.categories)
 	if err := configure(regs, cfg.config); err != nil {
 		return err
 	}
@@ -90,17 +93,15 @@ func applyFixes(report goyze.Report) error {
 // config is the parsed invocation.
 type config struct {
 	format     yze.Format
-	group      goyze.Group
+	config     string
 	categories []goyze.Category
 	patterns   []string
-	config     string
 	fix        bool
 }
 
 func configFromCmd(cmd *cli.Command) config {
 	return config{
 		format:     yze.Format(cmd.String("format")),
-		group:      goyze.Group(cmd.String("group")),
 		categories: toCategories(cmd.StringSlice("category")),
 		patterns:   patternsOf(cmd.Args().Slice()),
 		config:     cmd.String("config"),

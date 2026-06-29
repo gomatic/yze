@@ -5,9 +5,10 @@ import (
 	"testing"
 
 	errs "github.com/gomatic/go-error"
-	"github.com/gomatic/yze"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/gomatic/yze"
 )
 
 func TestLoadConfigParsesAnalyzerSettings(t *testing.T) {

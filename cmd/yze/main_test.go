@@ -9,10 +9,11 @@ import (
 
 	errs "github.com/gomatic/go-error"
 	goyze "github.com/gomatic/go-yze"
-	"github.com/gomatic/yze"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/tools/go/analysis"
+
+	"github.com/gomatic/yze"
 )
 
 func swapDriver(t *testing.T, d goyze.Driver) {
@@ -32,7 +33,7 @@ func fileSet(t *testing.T) (*token.FileSet, *token.File) {
 }
 
 func sampleReg() goyze.Registration {
-	return goyze.Registration{Name: "x", Group: "go", Analyzer: &analysis.Analyzer{Name: "x"}}
+	return goyze.Registration{Name: "x", Analyzer: &analysis.Analyzer{Name: "x"}}
 }
 
 // reportDriver returns one diagnostic with no fix.
@@ -58,36 +59,20 @@ func runApp(t *testing.T, args ...string) (string, error) {
 func TestActionEmitsTextFormat(t *testing.T) {
 	swapDriver(t, reportDriver(t))
 
-	out, err := runApp(t, "yze", "--format", "text")
+	out, err := runApp(t, appName, "--format", "text")
 
 	require.NoError(t, err)
-	assert.Equal(t, "p.go:1:1: boom (yze/go/x)\n", out)
+	assert.Equal(t, "p.go:1:1: boom (yze/x)\n", out)
 }
 
 func TestActionEmitsSticklerJSONByDefault(t *testing.T) {
 	swapDriver(t, reportDriver(t))
 
-	out, err := runApp(t, "yze")
+	out, err := runApp(t, appName)
 
 	require.NoError(t, err)
 	assert.Contains(t, out, `"diagnostics"`)
 	assert.Contains(t, out, `"boom"`)
-}
-
-func TestActionAppliesGroupFilter(t *testing.T) {
-	var captured []goyze.Registration
-	swapDriver(t, func(regs []goyze.Registration, _ []string) (*token.FileSet, []goyze.DriverResult, error) {
-		captured = regs
-		return token.NewFileSet(), nil, nil
-	})
-
-	_, err := runApp(t, "yze", "--group", "go")
-	require.NoError(t, err)
-	assert.Len(t, captured, 14)
-
-	_, err = runApp(t, "yze", "--group", "sql")
-	require.NoError(t, err)
-	assert.Empty(t, captured)
 }
 
 func TestActionAppliesCategoryFilter(t *testing.T) {
@@ -97,11 +82,11 @@ func TestActionAppliesCategoryFilter(t *testing.T) {
 		return token.NewFileSet(), nil, nil
 	})
 
-	_, err := runApp(t, "yze", "--category", "errors")
+	_, err := runApp(t, appName, "--category", "errors")
 
 	require.NoError(t, err)
 	require.Len(t, captured, 2)
-	assert.Equal(t, "yze/go/errconst", captured[0].RuleID())
+	assert.Equal(t, "yze/errconst", captured[0].RuleID())
 }
 
 func TestActionPassesExplicitPatterns(t *testing.T) {
@@ -111,7 +96,7 @@ func TestActionPassesExplicitPatterns(t *testing.T) {
 		return token.NewFileSet(), nil, nil
 	})
 
-	_, err := runApp(t, "yze", "./foo/...")
+	_, err := runApp(t, appName, "./foo/...")
 
 	require.NoError(t, err)
 	assert.Equal(t, []string{"./foo/..."}, captured)
@@ -122,7 +107,7 @@ func TestActionReturnsDriverError(t *testing.T) {
 		return nil, nil, errs.Const("driver boom")
 	})
 
-	_, err := runApp(t, "yze")
+	_, err := runApp(t, appName)
 
 	require.Error(t, err)
 }
@@ -130,7 +115,7 @@ func TestActionReturnsDriverError(t *testing.T) {
 func TestActionRejectsUnknownFormat(t *testing.T) {
 	swapDriver(t, reportDriver(t))
 
-	_, err := runApp(t, "yze", "--format", "nope")
+	_, err := runApp(t, appName, "--format", "nope")
 
 	require.Error(t, err)
 }
@@ -138,7 +123,7 @@ func TestActionRejectsUnknownFormat(t *testing.T) {
 func TestActionFixWithNoFixesSucceeds(t *testing.T) {
 	swapDriver(t, reportDriver(t))
 
-	_, err := runApp(t, "yze", "--fix")
+	_, err := runApp(t, appName, "--fix")
 
 	require.NoError(t, err)
 }
@@ -162,7 +147,7 @@ func TestActionFixPropagatesApplyError(t *testing.T) {
 	t.Cleanup(func() { readFile = originalRead })
 	readFile = func(string) ([]byte, error) { return nil, errs.Const("read boom") }
 
-	_, err := runApp(t, "yze", "--fix")
+	_, err := runApp(t, appName, "--fix")
 
 	require.Error(t, err)
 }
@@ -172,8 +157,8 @@ func TestRunReturnsZeroOnSuccessAndOneOnError(t *testing.T) {
 		return token.NewFileSet(), nil, nil
 	})
 
-	assert.Equal(t, 0, run([]string{"yze"}))
-	assert.Equal(t, 1, run([]string{"yze", "--format", "nope"}))
+	assert.Equal(t, 0, run([]string{appName}))
+	assert.Equal(t, 1, run([]string{appName, "--format", "nope"}))
 }
 
 func TestOSWriteFilePreservesAndRejectsMissing(t *testing.T) {
@@ -197,7 +182,7 @@ func TestMainExits(t *testing.T) {
 
 	var code int
 	osExit = func(c int) { code = c }
-	os.Args = []string{"yze"}
+	os.Args = []string{appName}
 
 	main()
 
@@ -233,7 +218,7 @@ func TestActionAppliesConfigFile(t *testing.T) {
 		}
 	})
 
-	_, err := runApp(t, "yze", "--config", "yze.yaml")
+	_, err := runApp(t, appName, "--config", "yze.yaml")
 
 	require.NoError(t, err)
 }
@@ -242,7 +227,7 @@ func TestActionReportsConfigLoadError(t *testing.T) {
 	swapDriver(t, emptyDriver())
 	swapReadFile(t, "", errs.Const("no config file"))
 
-	_, err := runApp(t, "yze", "--config", "missing.yaml")
+	_, err := runApp(t, appName, "--config", "missing.yaml")
 
 	require.Error(t, err)
 }
@@ -251,7 +236,7 @@ func TestActionReportsConfigApplyError(t *testing.T) {
 	swapDriver(t, emptyDriver())
 	swapReadFile(t, "analyzers:\n  ptrrecv:\n    nope:\n      - x\n", nil)
 
-	_, err := runApp(t, "yze", "--config", "yze.yaml")
+	_, err := runApp(t, appName, "--config", "yze.yaml")
 
 	require.Error(t, err)
 }
