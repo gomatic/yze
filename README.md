@@ -1,6 +1,6 @@
 # yze
 
-The aggregator for the gomatic **yze** analyzer family: it fans in every `yze-<name>` analyzer and runs them over Go packages through the [`go-yze`](https://github.com/gomatic/go-yze) driver, emitting a normalized report. Each analyzer reports under the rule id `yze/<name>`.
+The aggregator for the gomatic **yze** analyzer family. It fans in every `yze-<name>` analyzer and runs two kinds together: the `yze-go-*` analyzers over Go packages through the [`go-yze`](https://github.com/gomatic/go-yze) driver, and the `yze-sql-*` analyzers over the `.sql` files beneath the same pattern roots. Both emit one normalized report, so a single `yze` run lints Go and SQL. Each analyzer reports under the flat rule id `yze/<name>` and carries a language `--category` (`go`, `sql`).
 
 ```
 yze [--format stickler-json|text] [--fix] [--category <c>...] [--config <path>] [packages...]
