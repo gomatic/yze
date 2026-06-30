@@ -12,6 +12,8 @@ github.com/gomatic/yze-cliv3 v0.1.0 h1:lF11u8qZSINtdg2qPCtIOjU3c0NF5aqDTKzzlOpaN
 github.com/gomatic/yze-cliv3 v0.1.0/go.mod h1:dyRsZNuvVkbyfbt5wwx546P+q6nZ+QIPD6jZ/HfquH0=
 github.com/gomatic/yze-cliversion v0.1.0 h1:NMhTkEjEAVClOC3+WnB/tp0nuEceThlxWIrPPuT2rzU=
 github.com/gomatic/yze-cliversion v0.1.0/go.mod h1:Xz9c252Pd7ROQy83Go1a0Gz07tbkb/+NJ/saQyJG6/Y=
+github.com/gomatic/yze-cliversion v0.1.1 h1:KZthfwrzkzL7/hno4I7v53TEVndNViG+0dIG5nORSGs=
+github.com/gomatic/yze-cliversion v0.1.1/go.mod h1:Xz9c252Pd7ROQy83Go1a0Gz07tbkb/+NJ/saQyJG6/Y=
 github.com/gomatic/yze-ctxfirst v0.1.1 h1:TUWc0Z5n4n6bPgl6End00N84QjQTNp331GN6/Ngcmhc=
 github.com/gomatic/yze-ctxfirst v0.1.1/go.mod h1:LG43BAut9lA+jkKb+r1j09pbQUHujPBc55dTuqUvcWc=
 github.com/gomatic/yze-emptyiface v0.1.0 h1:THh5E8xlPIujqEnHHOjDzHyhuNp7Ove1m8m7x05rqQY=
