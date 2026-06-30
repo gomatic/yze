@@ -13,14 +13,20 @@ require (
 	github.com/gomatic/yze-go-emptyiface v0.2.1
 	github.com/gomatic/yze-go-errconst v0.2.2
 	github.com/gomatic/yze-go-errlast v0.2.1
+	github.com/gomatic/yze-go-globalvar v0.1.0
 	github.com/gomatic/yze-go-gotostmt v0.2.1
+	github.com/gomatic/yze-go-jsontag v0.1.0
 	github.com/gomatic/yze-go-layout v0.2.1
 	github.com/gomatic/yze-go-namedtypes v0.2.1
+	github.com/gomatic/yze-go-noinit v0.1.0
+	github.com/gomatic/yze-go-nopanic v0.1.0
 	github.com/gomatic/yze-go-pkgstd v0.2.1
 	github.com/gomatic/yze-go-ptrparam v0.2.1
 	github.com/gomatic/yze-go-ptrrecv v0.2.1
+	github.com/gomatic/yze-go-slogkv v0.1.0
 	github.com/gomatic/yze-go-stdlog v0.2.1
 	github.com/gomatic/yze-go-testfile v0.2.1
+	github.com/gomatic/yze-go-valuector v0.1.0
 	github.com/stretchr/testify v1.11.1
 	github.com/urfave/cli/v3 v3.10.1
 	golang.org/x/tools v0.47.0

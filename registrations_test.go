@@ -32,14 +32,20 @@ func TestRegistrationsCatalog(t *testing.T) {
 			"yze/emptyiface",
 			"yze/errconst",
 			"yze/errlast",
+			"yze/globalvar",
 			"yze/gotostmt",
+			"yze/jsontag",
 			"yze/layout",
 			"yze/namedtypes",
+			"yze/noinit",
+			"yze/nopanic",
 			"yze/pkgstd",
 			"yze/ptrparam",
 			"yze/ptrrecv",
+			"yze/slogkv",
 			"yze/stdlog",
 			"yze/testfile",
+			"yze/valuector",
 		},
 		ruleIDs(regs),
 	)
@@ -55,9 +61,11 @@ func TestFilterByCategorySelectsMatching(t *testing.T) {
 
 func TestFilterByMultipleCategories(t *testing.T) {
 	got := yze.Filter(yze.Registrations(), []goyze.Category{"errors", "patterns"})
-	assert.Equal(t, []string{"yze/ctxfirst", "yze/errconst", "yze/errlast", "yze/gotostmt"}, ruleIDs(got))
+	assert.Equal(t, []string{
+		"yze/ctxfirst", "yze/errconst", "yze/errlast", "yze/gotostmt", "yze/noinit", "yze/nopanic",
+	}, ruleIDs(got))
 }
 
 func TestFilterWithNoConstraintsKeepsAll(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), nil), 16)
+	assert.Len(t, yze.Filter(yze.Registrations(), nil), 22)
 }
