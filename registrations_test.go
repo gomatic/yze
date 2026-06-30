@@ -26,6 +26,8 @@ func TestRegistrationsCatalog(t *testing.T) {
 		[]string{
 			"yze/anonstruct",
 			"yze/boolname",
+			"yze/cliv3",
+			"yze/cliversion",
 			"yze/ctxfirst",
 			"yze/emptyiface",
 			"yze/errconst",
@@ -57,5 +59,5 @@ func TestFilterByMultipleCategories(t *testing.T) {
 }
 
 func TestFilterWithNoConstraintsKeepsAll(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), nil), 14)
+	assert.Len(t, yze.Filter(yze.Registrations(), nil), 16)
 }

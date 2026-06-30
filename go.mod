@@ -5,6 +5,8 @@ go 1.26.4
 require (
 	github.com/gomatic/go-error v0.3.0
 	github.com/gomatic/go-yze v0.4.0
+	github.com/gomatic/yze-cliv3 v0.1.0
+	github.com/gomatic/yze-cliversion v0.1.0
 	github.com/gomatic/yze-errconst v0.1.0
 	github.com/gomatic/yze-gotostmt v0.1.0
 	github.com/gomatic/yze-namedtypes v0.1.1

@@ -9,6 +9,8 @@ import (
 	goyze "github.com/gomatic/go-yze"
 	anonstruct "github.com/gomatic/yze-anonstruct"
 	boolname "github.com/gomatic/yze-boolname"
+	cliv3 "github.com/gomatic/yze-cliv3"
+	cliversion "github.com/gomatic/yze-cliversion"
 	ctxfirst "github.com/gomatic/yze-ctxfirst"
 	emptyiface "github.com/gomatic/yze-emptyiface"
 	errconst "github.com/gomatic/yze-errconst"
@@ -28,6 +30,8 @@ func Registrations() []goyze.Registration {
 	return []goyze.Registration{
 		anonstruct.Registration,
 		boolname.Registration,
+		cliv3.Registration,
+		cliversion.Registration,
 		ctxfirst.Registration,
 		emptyiface.Registration,
 		errconst.Registration,
