@@ -72,6 +72,7 @@ func createApp() *cli.Command {
 			&cli.BoolFlag{Name: "fix", Usage: "apply suggested fixes in place"},
 			&cli.StringSliceFlag{Name: "category", Usage: "restrict to analyzers carrying any of these categories"},
 			&cli.StringFlag{Name: "config", Usage: "path to a yze config file (per-analyzer settings)"},
+			&cli.StringFlag{Name: "emit-rules", Usage: "export the rule catalog (sarif, grit) instead of running"},
 		},
 		Action: action,
 	}
@@ -81,6 +82,9 @@ func createApp() *cli.Command {
 func action(_ context.Context, cmd *cli.Command) error {
 	cfg := configFromCmd(cmd)
 	regs := yze.Filter(yze.Registrations(), cfg.categories)
+	if cfg.emitRules != "" {
+		return yze.EmitRules(cmd.Writer, cfg.emitRules, regs)
+	}
 	if err := configure(regs, cfg.config); err != nil {
 		return err
 	}
@@ -104,6 +108,7 @@ func applyFixes(report goyze.Report) error {
 type config struct {
 	format     yze.Format
 	config     string
+	emitRules  yze.RuleFormat
 	categories []goyze.Category
 	patterns   []goyze.Pattern
 	fix        bool
@@ -115,6 +120,7 @@ func configFromCmd(cmd *cli.Command) config {
 		categories: toCategories(cmd.StringSlice("category")),
 		patterns:   patternsOf(cmd.Args().Slice()),
 		config:     cmd.String("config"),
+		emitRules:  yze.RuleFormat(cmd.String("emit-rules")),
 		fix:        cmd.Bool("fix"),
 	}
 }

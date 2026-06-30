@@ -63,6 +63,22 @@ func TestVersionFlagReportsVersion(t *testing.T) {
 	assert.Contains(t, out, version)
 }
 
+func TestActionEmitRulesSARIF(t *testing.T) {
+	out, err := runApp(t, appName, "--emit-rules", "sarif")
+
+	require.NoError(t, err)
+	assert.Contains(t, out, `"$schema"`)
+	assert.Contains(t, out, `"yze/errconst"`)
+}
+
+func TestActionEmitRulesGrit(t *testing.T) {
+	out, err := runApp(t, appName, "--emit-rules", "grit")
+
+	require.NoError(t, err)
+	assert.Contains(t, out, "# yze rule catalog")
+	assert.Contains(t, out, "yze/errconst")
+}
+
 func TestActionEmitsTextFormat(t *testing.T) {
 	swapDriver(t, reportDriver(t))
 
