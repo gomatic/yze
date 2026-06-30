@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"path/filepath"
 
 	goyze "github.com/gomatic/go-yze"
 	"github.com/urfave/cli/v3"
@@ -21,6 +22,7 @@ var (
 	driver    goyze.Driver     = goyze.CheckerDriver
 	readFile  goyze.FileReader = os.ReadFile
 	writeFile goyze.FileWriter = osWriteFile
+	walkDir   yze.WalkDir      = filepath.WalkDir
 )
 
 // osWriteFile writes data back to an existing file, preserving its mode.
@@ -88,7 +90,7 @@ func action(_ context.Context, cmd *cli.Command) error {
 	if err := configure(regs, cfg.config); err != nil {
 		return err
 	}
-	report, err := goyze.Run(driver, regs, cfg.patterns)
+	report, err := runAll(regs, yze.FilterSQL(yze.SQLAnalyzers(), cfg.categories), cfg.patterns)
 	if err != nil {
 		return err
 	}
@@ -96,6 +98,29 @@ func action(_ context.Context, cmd *cli.Command) error {
 		return applyFixes(report)
 	}
 	return yze.Emit(cmd.Writer, cfg.format, report)
+}
+
+// runAll runs the Go analyzers over the package patterns and the SQL analyzers
+// over the .sql files beneath them, merging their findings into one report. A
+// language whose analyzer set is empty (e.g. filtered out by --category) is
+// skipped entirely, so yze runs cleanly on a Go-only or SQL-only tree.
+func runAll(regs []goyze.Registration, sqlAnalyzers []yze.SQLAnalyzer, patterns []goyze.Pattern) (goyze.Report, error) {
+	report := goyze.Report{}
+	if len(regs) > 0 {
+		goReport, err := goyze.Run(driver, regs, patterns)
+		if err != nil {
+			return goyze.Report{}, err
+		}
+		report.Diagnostics = append(report.Diagnostics, goReport.Diagnostics...)
+	}
+	if len(sqlAnalyzers) > 0 {
+		sqlReport, err := yze.RunSQL(readFile, walkDir, sqlAnalyzers, yze.RootsOf(patterns))
+		if err != nil {
+			return goyze.Report{}, err
+		}
+		report.Diagnostics = append(report.Diagnostics, sqlReport.Diagnostics...)
+	}
+	return report, nil
 }
 
 // applyFixes applies every suggested fix in the report through the shared engine.

@@ -5,6 +5,7 @@ import (
 	"context"
 	"go/token"
 	"os"
+	"path/filepath"
 	"testing"
 
 	errs "github.com/gomatic/go-error"
@@ -262,4 +263,36 @@ func TestActionReportsConfigApplyError(t *testing.T) {
 	_, err := runApp(t, appName, "--config", "yze.yaml")
 
 	require.Error(t, err)
+}
+
+// sqlDir writes a single .sql file with the given contents into a fresh temp dir
+// and returns the recursive pattern naming it.
+func sqlDir(t *testing.T, contents string) string {
+	t.Helper()
+	dir := t.TempDir()
+	require.NoError(t, os.WriteFile(filepath.Join(dir, "q.sql"), []byte(contents), 0o600))
+	return dir + "/..."
+}
+
+func TestActionRunsBundledSQLAnalyzer(t *testing.T) {
+	// --category sql skips the Go analyzers and runs the SQL analyzers over the
+	// .sql files under the pattern.
+	out, err := runApp(t, appName, "--category", "sql", sqlDir(t, "SELECT 1 FROM t;"))
+	require.NoError(t, err)
+	assert.Contains(t, out, "yze/keywordcase")
+	assert.Contains(t, out, "should be lowercase")
+}
+
+func TestActionReturnsSQLAnalyzerError(t *testing.T) {
+	// A lexical scan failure in a .sql file surfaces as a run error.
+	_, err := runApp(t, appName, "--category", "sql", sqlDir(t, "select 'unterminated"))
+	require.Error(t, err)
+}
+
+func TestActionSkipsBothLanguagesWhenCategoryMatchesNothing(t *testing.T) {
+	// A category no analyzer carries filters out both the Go and SQL analyzers, so
+	// neither language runs and the report is empty.
+	out, err := runApp(t, appName, "--category", "no-such-category", sqlDir(t, "SELECT 1;"))
+	require.NoError(t, err)
+	assert.NotContains(t, out, "yze/keywordcase")
 }

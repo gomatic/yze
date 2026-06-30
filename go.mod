@@ -33,6 +33,13 @@ require (
 )
 
 require (
+	github.com/gomatic/go-sql v0.0.2 // indirect
+	github.com/gomatic/yze-sql-keywordcase v0.3.0 // indirect
+	github.com/pganalyze/pg_query_go/v6 v6.2.2 // indirect
+	google.golang.org/protobuf v1.36.10 // indirect
+)
+
+require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	golang.org/x/mod v0.37.0 // indirect
