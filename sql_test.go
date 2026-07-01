@@ -18,10 +18,10 @@ const boom errs.Const = "boom"
 // without a real tree.
 type fakeEntry struct{ name string }
 
-func (f fakeEntry) Name() string               { return f.name }
-func (fakeEntry) IsDir() bool                  { return false }
-func (fakeEntry) Type() fs.FileMode            { return 0 }
-func (fakeEntry) Info() (fs.FileInfo, error)   { return nil, nil }
+func (f fakeEntry) Name() string             { return f.name }
+func (fakeEntry) IsDir() bool                { return false }
+func (fakeEntry) Type() fs.FileMode          { return 0 }
+func (fakeEntry) Info() (fs.FileInfo, error) { return nil, nil }
 
 // writeSQLDir writes one .sql and one unrelated file into a temp dir and returns it.
 func writeSQLDir(t *testing.T, sql string) string {

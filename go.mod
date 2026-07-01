@@ -20,13 +20,14 @@ require (
 	github.com/gomatic/yze-go-namedtypes v0.2.1
 	github.com/gomatic/yze-go-noinit v0.1.0
 	github.com/gomatic/yze-go-nopanic v0.1.0
-	github.com/gomatic/yze-go-pkgstd v0.2.1
-	github.com/gomatic/yze-go-ptrparam v0.2.1
+	github.com/gomatic/yze-go-pkgstd v0.3.0
+	github.com/gomatic/yze-go-ptrparam v0.3.0
 	github.com/gomatic/yze-go-ptrrecv v0.2.1
 	github.com/gomatic/yze-go-slogkv v0.1.0
 	github.com/gomatic/yze-go-stdlog v0.2.1
 	github.com/gomatic/yze-go-testfile v0.2.1
 	github.com/gomatic/yze-go-valuector v0.1.0
+	github.com/gomatic/yze-sql-keywordcase v0.3.0
 	github.com/stretchr/testify v1.11.1
 	github.com/urfave/cli/v3 v3.10.1
 	golang.org/x/tools v0.47.0
@@ -34,7 +35,6 @@ require (
 
 require (
 	github.com/gomatic/go-sql v0.0.2 // indirect
-	github.com/gomatic/yze-sql-keywordcase v0.3.0 // indirect
 	github.com/pganalyze/pg_query_go/v6 v6.2.2 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 )
