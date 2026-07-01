@@ -144,12 +144,138 @@ func TestActionRejectsUnknownFormat(t *testing.T) {
 	require.Error(t, err)
 }
 
+func swapVerifier(t *testing.T, v goyze.Verifier) {
+	t.Helper()
+	original := verifier
+	t.Cleanup(func() { verifier = original })
+	verifier = v
+}
+
+func swapWriteFile(t *testing.T, w goyze.FileWriter) {
+	t.Helper()
+	original := writeFile
+	t.Cleanup(func() { writeFile = original })
+	writeFile = w
+}
+
+func swapErrWriter(t *testing.T) *bytes.Buffer {
+	t.Helper()
+	original := errWriter
+	t.Cleanup(func() { errWriter = original })
+	var buf bytes.Buffer
+	errWriter = &buf
+	return &buf
+}
+
+// fixingDriver returns one diagnostic carrying a suggested fix, so --fix
+// applies one edit to one file.
+func fixingDriver(t *testing.T) goyze.Driver {
+	fset, f := fileSet(t)
+	return func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
+		return fset, []goyze.DriverResult{{
+			Registration: sampleReg(),
+			Diagnostics: []analysis.Diagnostic{{
+				Pos:     f.Pos(0),
+				Message: "boom",
+				SuggestedFixes: []analysis.SuggestedFix{{
+					Message:   "rewrite",
+					TextEdits: []analysis.TextEdit{{Pos: f.Pos(8), End: f.Pos(9), NewText: []byte("q")}},
+				}},
+			}},
+		}}, nil
+	}
+}
+
+// swapAppliedFix arranges a --fix run that successfully applies one edit:
+// the driver offers a fix, the file reads back as valid Go, and the write
+// lands in the returned map.
+func swapAppliedFix(t *testing.T) map[string]string {
+	t.Helper()
+	swapDriver(t, fixingDriver(t))
+	swapReadFile(t, "package p\n", nil)
+	written := map[string]string{}
+	swapWriteFile(t, func(path string, data []byte) error {
+		written[path] = string(data)
+		return nil
+	})
+	return written
+}
+
 func TestActionFixWithNoFixesSucceeds(t *testing.T) {
 	swapDriver(t, reportDriver(t))
+	swapVerifier(t, func(_ []goyze.Pattern) (goyze.VerifyResult, error) {
+		t.Fatal("verifier must not run when no edits were applied")
+		return goyze.VerifyResult{}, nil
+	})
+
+	out, err := runApp(t, appName, "--fix")
+
+	require.NoError(t, err)
+	assert.Empty(t, out, "a no-edit --fix run stays silent")
+}
+
+func TestActionFixVerifiesAndPrintsSummaryWhenClean(t *testing.T) {
+	written := swapAppliedFix(t)
+	var captured []goyze.Pattern
+	swapVerifier(t, func(patterns []goyze.Pattern) (goyze.VerifyResult, error) {
+		captured = patterns
+		return goyze.VerifyResult{}, nil
+	})
+
+	out, err := runApp(t, appName, "--fix", "./foo/...")
+
+	require.NoError(t, err)
+	assert.Equal(t, "applied 1 edit(s) across 1 file(s)\n", out)
+	assert.Equal(t, []goyze.Pattern{"./foo/..."}, captured, "the verifier must reload the same patterns")
+	assert.Equal(t, map[string]string{"p.go": "package q\n"}, written)
+}
+
+func TestActionFixFailsWhenTreeNoLongerTypeChecks(t *testing.T) {
+	swapAppliedFix(t)
+	stderr := swapErrWriter(t)
+	swapVerifier(t, func(_ []goyze.Pattern) (goyze.VerifyResult, error) {
+		return goyze.VerifyResult{Issues: []goyze.VerifyIssue{
+			{Pos: "p_test.go:5:2", Msg: "too many arguments in call to f"},
+		}}, nil
+	})
 
 	_, err := runApp(t, appName, "--fix")
 
-	require.NoError(t, err)
+	require.ErrorIs(t, err, errFixVerify)
+	assert.Contains(t, stderr.String(), "p_test.go:5:2: too many arguments in call to f\n")
+	assert.Contains(t, stderr.String(),
+		"fixes applied, but 1 file(s) need follow-up "+
+			"(the tree no longer type-checks — likely _test.go callers of retyped functions)\n")
+}
+
+func TestActionFixPropagatesVerifierError(t *testing.T) {
+	swapAppliedFix(t)
+	boom := errs.Const("verify boom")
+	swapVerifier(t, func(_ []goyze.Pattern) (goyze.VerifyResult, error) {
+		return goyze.VerifyResult{}, boom
+	})
+
+	_, err := runApp(t, appName, "--fix")
+
+	require.ErrorIs(t, err, boom)
+}
+
+// failWriter fails every write, to prove the fix summary's write error surfaces.
+type failWriter struct{}
+
+func (failWriter) Write([]byte) (int, error) { return 0, errs.Const("write boom") }
+
+func TestActionFixReportsSummaryWriteError(t *testing.T) {
+	swapAppliedFix(t)
+	swapVerifier(t, func(_ []goyze.Pattern) (goyze.VerifyResult, error) {
+		return goyze.VerifyResult{}, nil
+	})
+	app := createApp()
+	app.Writer = failWriter{}
+
+	err := app.Run(context.Background(), []string{appName, "--fix"})
+
+	require.Error(t, err)
 }
 
 func TestActionFixPropagatesApplyError(t *testing.T) {

@@ -7,9 +7,11 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 
+	errs "github.com/gomatic/go-error"
 	goyze "github.com/gomatic/go-yze"
 	"github.com/urfave/cli/v3"
 
@@ -20,10 +22,16 @@ import (
 // packages or touching the filesystem.
 var (
 	driver    goyze.Driver     = goyze.CheckerDriver
+	verifier  goyze.Verifier   = goyze.CheckerVerifier
 	readFile  goyze.FileReader = os.ReadFile
 	writeFile goyze.FileWriter = osWriteFile
 	walkDir   yze.WalkDir      = filepath.WalkDir
+	errWriter io.Writer        = os.Stderr
 )
+
+// errFixVerify reports that applied fixes left the tree failing to type-check;
+// the residual errors were already printed to errWriter.
+const errFixVerify errs.Const = "post-fix verification failed"
 
 // osWriteFile writes data back to an existing file, preserving its mode.
 func osWriteFile(path string, data []byte) error {
@@ -95,7 +103,7 @@ func action(_ context.Context, cmd *cli.Command) error {
 		return err
 	}
 	if cfg.fix {
-		return applyFixes(report)
+		return applyFixes(cmd.Writer, report, cfg.patterns)
 	}
 	return yze.Emit(cmd.Writer, cfg.format, report)
 }
@@ -123,10 +131,45 @@ func runAll(regs []goyze.Registration, sqlAnalyzers []yze.SQLAnalyzer, patterns 
 	return report, nil
 }
 
-// applyFixes applies every suggested fix in the report through the shared engine.
-func applyFixes(report goyze.Report) error {
-	_, err := goyze.ApplyFixes(readFile, writeFile, goyze.GoFormat, allFixes(report))
+// applyFixes applies every suggested fix in the report through the shared
+// engine, then — when at least one edit landed — verifies the tree still
+// type-checks. A run that applied no edits is left untouched and unverified.
+func applyFixes(w io.Writer, report goyze.Report, patterns []goyze.Pattern) error {
+	result, err := goyze.ApplyFixes(readFile, writeFile, goyze.GoFormat, allFixes(report))
+	if err != nil {
+		return err
+	}
+	if result.EditsApplied == 0 {
+		return nil
+	}
+	return verifyFixes(w, result, patterns)
+}
+
+// verifyFixes reloads the fixed patterns — test files included, which the
+// analysis driver never loads — and either confirms the applied edits or
+// reports the residual errors and fails.
+func verifyFixes(w io.Writer, result goyze.FixResult, patterns []goyze.Pattern) error {
+	verified, err := verifier(patterns)
+	if err != nil {
+		return err
+	}
+	if !verified.Clean() {
+		reportIssues(verified)
+		return errFixVerify
+	}
+	_, err = fmt.Fprintf(w, "applied %d edit(s) across %d file(s)\n", result.EditsApplied, result.FilesChanged)
 	return err
+}
+
+// reportIssues prints each residual error and a follow-up summary to errWriter.
+func reportIssues(verified goyze.VerifyResult) {
+	for _, issue := range verified.Issues {
+		_, _ = fmt.Fprintln(errWriter, issue)
+	}
+	_, _ = fmt.Fprintf(errWriter,
+		"fixes applied, but %d file(s) need follow-up "+
+			"(the tree no longer type-checks — likely _test.go callers of retyped functions)\n",
+		verified.Files())
 }
 
 // config is the parsed invocation.
