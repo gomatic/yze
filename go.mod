@@ -17,7 +17,7 @@ require (
 	github.com/gomatic/yze-go-gotostmt v0.2.1
 	github.com/gomatic/yze-go-jsontag v0.1.0
 	github.com/gomatic/yze-go-layout v0.2.1
-	github.com/gomatic/yze-go-namedtypes v0.2.1
+	github.com/gomatic/yze-go-namedtypes v0.3.0
 	github.com/gomatic/yze-go-noinit v0.1.0
 	github.com/gomatic/yze-go-nopanic v0.1.0
 	github.com/gomatic/yze-go-pkgstd v0.3.0
