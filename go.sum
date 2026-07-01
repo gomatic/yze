@@ -22,8 +22,8 @@ github.com/gomatic/yze-go-errconst v0.2.2 h1:g9xZhuBL5NRMOrXdcXkEyaHhmEVrNYueLd8
 github.com/gomatic/yze-go-errconst v0.2.2/go.mod h1:G2vpsOxB8eOgcoDUOBNWXPFA6FRSrRzydIw9rV3dhWk=
 github.com/gomatic/yze-go-errlast v0.2.1 h1:t5jegczaRIU5UMnJHWRIGl+bRn6JLiZn+5+0qe2HYg8=
 github.com/gomatic/yze-go-errlast v0.2.1/go.mod h1:wQ8Rd5ZLhSa5igDOvYuR+TWPEDuNKd4DlqZJi57QWWU=
-github.com/gomatic/yze-go-globalvar v0.1.0 h1:0Q/1VpX9co5ExBKVn9KdHjY6cmiCn3WTmCfSVi5yPzY=
-github.com/gomatic/yze-go-globalvar v0.1.0/go.mod h1:3X1i2tH4wLGvcFFT0SQJdXqc8kiukSoZXDYOpJDl0hc=
+github.com/gomatic/yze-go-globalvar v0.2.0 h1:AqzClYwIFEaOb/+b3lLjxLlTTG2S1z2iONcrsso87qs=
+github.com/gomatic/yze-go-globalvar v0.2.0/go.mod h1:3X1i2tH4wLGvcFFT0SQJdXqc8kiukSoZXDYOpJDl0hc=
 github.com/gomatic/yze-go-gotostmt v0.2.1 h1:pOV3xBRgRixt0eJNqEPQViswgUipx8nKCTJwBcE1W/E=
 github.com/gomatic/yze-go-gotostmt v0.2.1/go.mod h1:Xs3vuC+2FabNmnlXbYbwH6p1uPybMX/3cDtpSsTzGQE=
 github.com/gomatic/yze-go-jsontag v0.1.0 h1:kuoepLiq34U3Y+HrPXYpj1YkXKlmrP84xYMGMxzCHXk=
