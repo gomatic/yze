@@ -410,12 +410,12 @@ func TestOSWriteFilePreservesAndRejectsMissing(t *testing.T) {
 	path := t.TempDir() + "/f.go"
 	require.NoError(t, os.WriteFile(path, []byte("old"), 0o644))
 
-	require.NoError(t, osWriteFile(path, []byte("new")))
+	require.NoError(t, osWriteFile(sourcePath(path), []byte("new")))
 	got, err := os.ReadFile(path)
 	require.NoError(t, err)
 	assert.Equal(t, "new", string(got))
 
-	assert.Error(t, osWriteFile(t.TempDir()+"/missing.go", []byte("x")))
+	assert.Error(t, osWriteFile(sourcePath(t.TempDir()+"/missing.go"), []byte("x")))
 }
 
 func TestMainExits(t *testing.T) {

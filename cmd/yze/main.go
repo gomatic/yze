@@ -24,7 +24,7 @@ var (
 	driver    goyze.Driver     = goyze.CheckerDriver
 	verifier  goyze.Verifier   = goyze.CheckerVerifier
 	readFile  goyze.FileReader = os.ReadFile
-	writeFile goyze.FileWriter = osWriteFile
+	writeFile goyze.FileWriter = func(path string, data []byte) error { return osWriteFile(sourcePath(path), data) }
 	walkDir   yze.WalkDir      = filepath.WalkDir
 	errWriter io.Writer        = os.Stderr
 )
@@ -33,13 +33,16 @@ var (
 // the residual errors were already printed to errWriter.
 const errFixVerify errs.Const = "post-fix verification failed"
 
+// sourcePath is an on-disk path of a file a fix rewrites.
+type sourcePath string
+
 // osWriteFile writes data back to an existing file, preserving its mode.
-func osWriteFile(path string, data []byte) error {
-	info, err := os.Stat(path)
+func osWriteFile(path sourcePath, data []byte) error {
+	info, err := os.Stat(string(path))
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(path, data, info.Mode().Perm())
+	return os.WriteFile(string(path), data, info.Mode().Perm())
 }
 
 // appName is the CLI name.
@@ -103,7 +106,7 @@ func action(_ context.Context, cmd *cli.Command) error {
 	if err != nil {
 		return err
 	}
-	if cfg.fix {
+	if cfg.isFix {
 		return applyFixes(cmd.Writer, regs, sqlAnalyzers, cfg.patterns, report)
 	}
 	return yze.Emit(cmd.Writer, cfg.format, report)
@@ -141,10 +144,10 @@ const maxFixRounds = 10
 // edits, the distinct files touched, the rounds that applied edits, and whether
 // the loop stopped at the round cap rather than a fixpoint.
 type fixState struct {
-	files  map[string]struct{}
-	edits  int
-	rounds int
-	capped bool
+	files    map[string]struct{}
+	edits    int
+	rounds   int
+	isCapped bool
 }
 
 // absorb folds one applied round into the running totals and returns the
@@ -164,7 +167,7 @@ func (s fixState) absorb(result goyze.FixResult, fixes []goyze.Fix) fixState {
 
 // atCap marks the state as stopped by the round cap rather than a fixpoint.
 func (s fixState) atCap() fixState {
-	s.capped = true
+	s.isCapped = true
 	return s
 }
 
@@ -188,7 +191,7 @@ func applyFixes(
 	if state.edits == 0 {
 		return nil
 	}
-	if state.capped {
+	if state.isCapped {
 		_, _ = fmt.Fprintf(errWriter, "fix rounds capped at %d; fixes may remain — re-run --fix\n", maxFixRounds)
 	}
 	return verifyFixes(w, state, patterns)
@@ -269,7 +272,7 @@ type config struct {
 	emitRules  yze.RuleFormat
 	categories []goyze.Category
 	patterns   []goyze.Pattern
-	fix        bool
+	isFix      bool
 }
 
 func configFromCmd(cmd *cli.Command) config {
@@ -279,7 +282,7 @@ func configFromCmd(cmd *cli.Command) config {
 		patterns:   patternsOf(cmd.Args().Slice()),
 		config:     cmd.String("config"),
 		emitRules:  yze.RuleFormat(cmd.String("emit-rules")),
-		fix:        cmd.Bool("fix"),
+		isFix:      cmd.Bool("fix"),
 	}
 }
 
@@ -291,7 +294,7 @@ func configure(regs []goyze.Registration, path configPath) error {
 	if string(path) == "" {
 		return nil
 	}
-	settings, err := yze.LoadConfig(readFile, string(path))
+	settings, err := yze.LoadConfig(readFile, yze.ConfigPath(path))
 	if err != nil {
 		return err
 	}

@@ -20,10 +20,13 @@ type fileConfig struct {
 // LoadConfig reads and parses a yze config file into per-analyzer settings keyed
 // by analyzer name then setting name, ready for go-yze's ApplyConfig. The reader
 // is injected so callers control filesystem access.
-func LoadConfig(read func(path string) ([]byte, error), path string) (goyze.Settings, error) {
-	data, err := read(path)
+// ConfigPath is the path to a yze per-analyzer config file.
+type ConfigPath string
+
+func LoadConfig(read func(path string) ([]byte, error), path ConfigPath) (goyze.Settings, error) {
+	data, err := read(string(path))
 	if err != nil {
-		return nil, ErrConfig.With(err, "path", path)
+		return nil, ErrConfig.With(err, "path", string(path))
 	}
 	var parsed fileConfig
 	if err := yaml.Unmarshal(data, &parsed); err != nil {

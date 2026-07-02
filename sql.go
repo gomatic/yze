@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	errs "github.com/gomatic/go-error"
+	sql "github.com/gomatic/go-sql"
 	goyze "github.com/gomatic/go-yze"
 	keywordcase "github.com/gomatic/yze-sql-keywordcase"
 )
@@ -42,7 +43,9 @@ func SQLAnalyzers() []SQLAnalyzer {
 		{
 			Name:       keywordcase.Name,
 			Categories: []goyze.Category{keywordcase.Category},
-			Analyze:    keywordcase.Diagnostics,
+			Analyze: func(path, source string) ([]goyze.Diagnostic, error) {
+				return keywordcase.Diagnostics(keywordcase.Path(path), sql.SQL(source))
+			},
 		},
 	}
 }
@@ -109,13 +112,18 @@ func RunSQL(read goyze.FileReader, walk WalkDir, analyzers []SQLAnalyzer, roots 
 // sqlFiles collects every .sql file under each root.
 func sqlFiles(walk WalkDir, roots []string) ([]string, error) {
 	var files []string
+	c := sqlCollector{files: &files}
 	for _, root := range roots {
-		if err := collectUnder(walk, sqlRoot(root), &files); err != nil {
+		if err := collectUnder(walk, sqlRoot(root), c); err != nil {
 			return nil, err
 		}
 	}
 	return files, nil
 }
+
+// sqlCollector accumulates .sql paths across walk callbacks; the slice lives
+// behind a pointer field so the value handle's copies share it.
+type sqlCollector struct{ files *[]string }
 
 // sqlRoot is a directory root walked for .sql files.
 type sqlRoot string
@@ -124,8 +132,8 @@ type sqlRoot string
 // exist is not an error — a Go package pattern like "./foo/..." need not name a
 // real directory, and a tree with no SQL simply contributes none — so it's
 // skipped; any other walk failure is wrapped in [ErrSQLWalk].
-func collectUnder(walk WalkDir, root sqlRoot, files *[]string) error {
-	err := walk(string(root), appendSQLFiles(files))
+func collectUnder(walk WalkDir, root sqlRoot, c sqlCollector) error {
+	err := walk(string(root), c.visit)
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
 	}
@@ -135,25 +143,18 @@ func collectUnder(walk WalkDir, root sqlRoot, files *[]string) error {
 	return nil
 }
 
-// appendSQLFiles is a walk callback that appends every .sql file it visits to
-// files, pruning the directories Go tooling never lints: testdata (fixtures are
-// deliberate, often deliberately wrong), vendor, and hidden directories.
-func appendSQLFiles(files *[]string) fs.WalkDirFunc {
-	return func(path string, d fs.DirEntry, err error) error {
-		if err != nil {
-			return err
-		}
-		return visitSQLEntry(files, path, d)
+// visit is the walk callback: it prunes the directories Go tooling never
+// lints — testdata (fixtures are deliberate, often deliberately wrong),
+// vendor, and hidden trees — and collects every .sql file.
+func (c sqlCollector) visit(path string, d fs.DirEntry, err error) error {
+	if err != nil {
+		return err
 	}
-}
-
-// visitSQLEntry prunes exempt directories and collects .sql files.
-func visitSQLEntry(files *[]string, path string, d fs.DirEntry) error {
 	if d.IsDir() && prunedDir(dirName(d.Name())) {
 		return fs.SkipDir
 	}
 	if !d.IsDir() && strings.HasSuffix(path, sqlExtension) {
-		*files = append(*files, path)
+		*c.files = append(*c.files, path)
 	}
 	return nil
 }

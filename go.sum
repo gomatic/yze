@@ -26,8 +26,8 @@ github.com/gomatic/yze-go-globalvar v0.2.0 h1:AqzClYwIFEaOb/+b3lLjxLlTTG2S1z2iON
 github.com/gomatic/yze-go-globalvar v0.2.0/go.mod h1:3X1i2tH4wLGvcFFT0SQJdXqc8kiukSoZXDYOpJDl0hc=
 github.com/gomatic/yze-go-gotostmt v0.2.1 h1:pOV3xBRgRixt0eJNqEPQViswgUipx8nKCTJwBcE1W/E=
 github.com/gomatic/yze-go-gotostmt v0.2.1/go.mod h1:Xs3vuC+2FabNmnlXbYbwH6p1uPybMX/3cDtpSsTzGQE=
-github.com/gomatic/yze-go-jsontag v0.1.0 h1:kuoepLiq34U3Y+HrPXYpj1YkXKlmrP84xYMGMxzCHXk=
-github.com/gomatic/yze-go-jsontag v0.1.0/go.mod h1:3I2tmROrPJVuo/Z0TYZzkITi9GcVsT3ArehCG23gUJ0=
+github.com/gomatic/yze-go-jsontag v0.2.0 h1:rozIfsu1Wm707z9FoJrfBzI9sqpmP0I2xIU2z7TO1eE=
+github.com/gomatic/yze-go-jsontag v0.2.0/go.mod h1:3I2tmROrPJVuo/Z0TYZzkITi9GcVsT3ArehCG23gUJ0=
 github.com/gomatic/yze-go-layout v0.2.1 h1:rHLV4UU9f6AwMQDjgOAOmY1RmHG0GSgfCpCIWiWXJyA=
 github.com/gomatic/yze-go-layout v0.2.1/go.mod h1:v2/RitCem7MtAUq5pIxfGPOvWGye6+FB20wqIEBnjwE=
 github.com/gomatic/yze-go-namedtypes v0.5.1 h1:+NsfjAKJQziy7J3PtD7Oj2onhBsEsGRt6t9O8FOs8OA=
@@ -50,8 +50,8 @@ github.com/gomatic/yze-go-testfile v0.2.1 h1:kyifzTX0pf8cMz02q1vTG4JPh/QL7trYVnF
 github.com/gomatic/yze-go-testfile v0.2.1/go.mod h1:bvQ5LMgBn7+xqhvNTByROjP27JTqHWpLSh5kgTPbkjs=
 github.com/gomatic/yze-go-valuector v0.1.0 h1:HuNK8A6XWtpRVBqtpKeo9+F91p6N/dixXTvLfUKlghg=
 github.com/gomatic/yze-go-valuector v0.1.0/go.mod h1:MyAHMfPC920wQXhukMdezYAtVaD1iPNP2iw0z6RFqUo=
-github.com/gomatic/yze-sql-keywordcase v0.3.0 h1:O6gBOYMW8sqEPFLjmvUPmYlWaTWyd0VLByIlsTHzgZw=
-github.com/gomatic/yze-sql-keywordcase v0.3.0/go.mod h1:d6HImi0Bj9724iijCaedOIxezXytZdZHa1vu4rrytfI=
+github.com/gomatic/yze-sql-keywordcase v0.4.0 h1:J8ti2Xk+LAZmfvdn8knZRp5EjrtnYj1Dm3wcyV+Wyfk=
+github.com/gomatic/yze-sql-keywordcase v0.4.0/go.mod h1:d6HImi0Bj9724iijCaedOIxezXytZdZHa1vu4rrytfI=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
 github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
 github.com/pganalyze/pg_query_go/v6 v6.2.2 h1:O0L6zMC226R82RF3X5n0Ki6HjytDsoAzuzp4ATVAHNo=
