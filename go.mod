@@ -21,7 +21,7 @@ require (
 	github.com/gomatic/yze-go-noinit v0.1.0
 	github.com/gomatic/yze-go-nopanic v0.1.0
 	github.com/gomatic/yze-go-pkgstd v0.3.0
-	github.com/gomatic/yze-go-ptrparam v0.3.0
+	github.com/gomatic/yze-go-ptrparam v0.3.1
 	github.com/gomatic/yze-go-ptrrecv v0.3.0
 	github.com/gomatic/yze-go-slogkv v0.1.0
 	github.com/gomatic/yze-go-stdlog v0.2.1
