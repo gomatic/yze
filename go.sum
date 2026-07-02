@@ -38,8 +38,8 @@ github.com/gomatic/yze-go-nopanic v0.1.0 h1:OuVeE6mUa5oWZVbWfgnky3jZ65TWClfFxo6H
 github.com/gomatic/yze-go-nopanic v0.1.0/go.mod h1:RdEA6q+XNvkVo/sYELzHFn02QQwpOev0x673VkX2qhM=
 github.com/gomatic/yze-go-pkgstd v0.3.0 h1:oysWs1BmrR0JX2nPo0H95h9gnoh681CD4Vzri10m4s0=
 github.com/gomatic/yze-go-pkgstd v0.3.0/go.mod h1:bJlYo4tcwpWg93MkHDXk8Gb8Xl80+b8QB3g2+WWxlv0=
-github.com/gomatic/yze-go-ptrparam v0.3.1 h1:uWpNKH6wniS/3S7hP02J/WxDmsrTN10yja6Pmc/K5X4=
-github.com/gomatic/yze-go-ptrparam v0.3.1/go.mod h1:NGd3X2j4R86MhHaweY83HFYtYTIN3DlK8ui8bcnwTTE=
+github.com/gomatic/yze-go-ptrparam v0.4.0 h1:H+yQsWjmNJ7vW4GnF9oxTFWfb5995fe1bVeYVtz/P30=
+github.com/gomatic/yze-go-ptrparam v0.4.0/go.mod h1:NGd3X2j4R86MhHaweY83HFYtYTIN3DlK8ui8bcnwTTE=
 github.com/gomatic/yze-go-ptrrecv v0.3.0 h1:/GPYkIQ3vguxoLCCBSJuWZdrQw/D1l6sOoujaHgSpAY=
 github.com/gomatic/yze-go-ptrrecv v0.3.0/go.mod h1:cDVU8F0gJKGUX/Ejnl1C/kPVJutY4HMWwPRs5+GiDew=
 github.com/gomatic/yze-go-slogkv v0.1.0 h1:mvIaAmr8a5VNiFHk2N0uoLi8ejDKYJ5H+H0m7engXyU=
