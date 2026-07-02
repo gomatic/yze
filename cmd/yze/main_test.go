@@ -167,11 +167,29 @@ func swapErrWriter(t *testing.T) *bytes.Buffer {
 	return &buf
 }
 
-// fixingDriver returns one diagnostic carrying a suggested fix, so --fix
-// applies one edit to one file.
+// fixingDriver returns one diagnostic carrying a suggested fix on the first
+// call and a clean result afterwards, so --fix reaches its fixpoint after one
+// applied round.
 func fixingDriver(t *testing.T) goyze.Driver {
+	return sequenceDriver(t, 1, nil)
+}
+
+// sequenceDriver returns a driver that yields one fixable diagnostic per call
+// for the first fixRounds calls and a clean result afterwards, counting each
+// invocation in calls (when non-nil). It fakes the analyzers whose fix sets
+// shrink round over round, which is what the --fix fixpoint loop iterates on.
+func sequenceDriver(t *testing.T, fixRounds int, calls *int) goyze.Driver {
+	t.Helper()
 	fset, f := fileSet(t)
+	count := 0
 	return func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
+		count++
+		if calls != nil {
+			*calls = count
+		}
+		if count > fixRounds {
+			return fset, nil, nil
+		}
 		return fset, []goyze.DriverResult{{
 			Registration: sampleReg(),
 			Diagnostics: []analysis.Diagnostic{{
@@ -225,9 +243,86 @@ func TestActionFixVerifiesAndPrintsSummaryWhenClean(t *testing.T) {
 	out, err := runApp(t, appName, "--fix", "./foo/...")
 
 	require.NoError(t, err)
-	assert.Equal(t, "applied 1 edit(s) across 1 file(s)\n", out)
+	assert.Equal(t, "applied 1 edit(s) across 1 file(s) in 1 round(s)\n", out)
 	assert.Equal(t, []goyze.Pattern{"./foo/..."}, captured, "the verifier must reload the same patterns")
 	assert.Equal(t, map[string]string{"p.go": "package q\n"}, written)
+}
+
+// swapVerifierCounting installs a clean verifier that counts its invocations,
+// to prove verification runs exactly once after the final round.
+func swapVerifierCounting(t *testing.T) *int {
+	t.Helper()
+	calls := 0
+	swapVerifier(t, func(_ []goyze.Pattern) (goyze.VerifyResult, error) {
+		calls++
+		return goyze.VerifyResult{}, nil
+	})
+	return &calls
+}
+
+func TestActionFixIteratesToFixpoint(t *testing.T) {
+	driverCalls := 0
+	swapDriver(t, sequenceDriver(t, 2, &driverCalls))
+	swapReadFile(t, "package p\n", nil)
+	swapWriteFile(t, func(string, []byte) error { return nil })
+	verifyCalls := swapVerifierCounting(t)
+	stderr := swapErrWriter(t)
+
+	out, err := runApp(t, appName, "--fix")
+
+	require.NoError(t, err)
+	assert.Equal(
+		t,
+		"applied 2 edit(s) across 1 file(s) in 2 round(s)\n",
+		out,
+		"totals aggregate across rounds; files dedup",
+	)
+	assert.Equal(t, 3, driverCalls, "two fixing rounds plus the clean re-analysis that ends the loop")
+	assert.Equal(t, 1, *verifyCalls, "verification runs once, after the final round")
+	assert.Empty(t, stderr.String(), "no cap warning below maxFixRounds")
+}
+
+func TestActionFixStopsAtRoundCap(t *testing.T) {
+	driverCalls := 0
+	swapDriver(t, sequenceDriver(t, 1000, &driverCalls))
+	swapReadFile(t, "package p\n", nil)
+	swapWriteFile(t, func(string, []byte) error { return nil })
+	verifyCalls := swapVerifierCounting(t)
+	stderr := swapErrWriter(t)
+
+	out, err := runApp(t, appName, "--fix")
+
+	require.NoError(t, err)
+	assert.Equal(t, "applied 10 edit(s) across 1 file(s) in 10 round(s)\n", out)
+	assert.Contains(t, stderr.String(), "fix rounds capped at 10; fixes may remain")
+	assert.Equal(t, maxFixRounds, driverCalls, "the capped round must not trigger another re-analysis")
+	assert.Equal(t, 1, *verifyCalls, "a capped run is still verified, once")
+}
+
+func TestActionFixPropagatesReanalysisError(t *testing.T) {
+	boom := errs.Const("reanalysis boom")
+	inner := sequenceDriver(t, 1, nil)
+	calls := 0
+	swapDriver(
+		t,
+		func(regs []goyze.Registration, patterns []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
+			calls++
+			if calls > 1 {
+				return nil, nil, boom
+			}
+			return inner(regs, patterns)
+		},
+	)
+	swapReadFile(t, "package p\n", nil)
+	swapWriteFile(t, func(string, []byte) error { return nil })
+	swapVerifier(t, func(_ []goyze.Pattern) (goyze.VerifyResult, error) {
+		t.Fatal("verifier must not run when a re-analysis round fails")
+		return goyze.VerifyResult{}, nil
+	})
+
+	_, err := runApp(t, appName, "--fix")
+
+	require.ErrorIs(t, err, boom)
 }
 
 func TestActionFixFailsWhenTreeNoLongerTypeChecks(t *testing.T) {

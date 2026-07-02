@@ -4,9 +4,9 @@ go 1.26.4
 
 require (
 	github.com/gomatic/go-error v0.3.0
-	github.com/gomatic/go-yze v0.5.0
+	github.com/gomatic/go-yze v0.6.0
 	github.com/gomatic/yze-go-anonstruct v0.2.1
-	github.com/gomatic/yze-go-boolname v0.3.0
+	github.com/gomatic/yze-go-boolname v0.4.0
 	github.com/gomatic/yze-go-cliv3 v0.2.1
 	github.com/gomatic/yze-go-cliversion v0.2.1
 	github.com/gomatic/yze-go-ctxfirst v0.2.1
@@ -17,7 +17,7 @@ require (
 	github.com/gomatic/yze-go-gotostmt v0.2.1
 	github.com/gomatic/yze-go-jsontag v0.1.0
 	github.com/gomatic/yze-go-layout v0.2.1
-	github.com/gomatic/yze-go-namedtypes v0.4.0
+	github.com/gomatic/yze-go-namedtypes v0.5.0
 	github.com/gomatic/yze-go-noinit v0.1.0
 	github.com/gomatic/yze-go-nopanic v0.1.0
 	github.com/gomatic/yze-go-pkgstd v0.3.0
