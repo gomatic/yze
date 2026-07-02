@@ -4,8 +4,8 @@ github.com/gomatic/go-error v0.3.0 h1:RTmlkCRDSaIaqhDK2VCKWiiiCRDI0Egesv/EoJLWta
 github.com/gomatic/go-error v0.3.0/go.mod h1:+PAmcazlzCIDFBglesekV1LUQTEaQB+5801gftMxgZY=
 github.com/gomatic/go-sql v0.0.2 h1:XGytatxukf8mzqxKxzzvXfo9/cyArYeKpc5dGrhTbE4=
 github.com/gomatic/go-sql v0.0.2/go.mod h1:+76kFy4GeNkM8R18vSV1qdPuS+z6MmqIzcQcRwSnjK0=
-github.com/gomatic/go-yze v0.6.0 h1:qLst8Bkty277ld48tgCfIzgyWD/O3aYfGjV4jVOSIi8=
-github.com/gomatic/go-yze v0.6.0/go.mod h1:II5yr/hDyoSTDqFoUvLAatPPXyx3dnOXXT/C7Y7h+Qc=
+github.com/gomatic/go-yze v0.7.0 h1:flLUKXdDsXRDg/mwUtZGAqsyJMTiVit5Y03cNk8zmO4=
+github.com/gomatic/go-yze v0.7.0/go.mod h1:II5yr/hDyoSTDqFoUvLAatPPXyx3dnOXXT/C7Y7h+Qc=
 github.com/gomatic/yze-go-anonstruct v0.2.1 h1:SbDlylG1u6/Pdv79b9lM19hVOouggVeAAZq2VKnw1SY=
 github.com/gomatic/yze-go-anonstruct v0.2.1/go.mod h1:rVm0STgrctBhiG9Lb+p9LwY0/5BkJm24S/A68rSKK5M=
 github.com/gomatic/yze-go-boolname v0.4.0 h1:hSOfx3rVOp3WFhNYYg2wunyg426yAMl7EzOh3+8FMp8=
@@ -38,8 +38,8 @@ github.com/gomatic/yze-go-nopanic v0.1.0 h1:OuVeE6mUa5oWZVbWfgnky3jZ65TWClfFxo6H
 github.com/gomatic/yze-go-nopanic v0.1.0/go.mod h1:RdEA6q+XNvkVo/sYELzHFn02QQwpOev0x673VkX2qhM=
 github.com/gomatic/yze-go-pkgstd v0.3.0 h1:oysWs1BmrR0JX2nPo0H95h9gnoh681CD4Vzri10m4s0=
 github.com/gomatic/yze-go-pkgstd v0.3.0/go.mod h1:bJlYo4tcwpWg93MkHDXk8Gb8Xl80+b8QB3g2+WWxlv0=
-github.com/gomatic/yze-go-ptrparam v0.5.1 h1:bCsgt9HswdMWh6DBE5y/TC3D4dJJnKwN7c+j1JLAxjs=
-github.com/gomatic/yze-go-ptrparam v0.5.1/go.mod h1:NGd3X2j4R86MhHaweY83HFYtYTIN3DlK8ui8bcnwTTE=
+github.com/gomatic/yze-go-ptrparam v0.6.0 h1:NcOCdlO+amUOu15XZcRs4BN39JauEw58bqkI8HK+GkU=
+github.com/gomatic/yze-go-ptrparam v0.6.0/go.mod h1:NGd3X2j4R86MhHaweY83HFYtYTIN3DlK8ui8bcnwTTE=
 github.com/gomatic/yze-go-ptrrecv v0.3.0 h1:/GPYkIQ3vguxoLCCBSJuWZdrQw/D1l6sOoujaHgSpAY=
 github.com/gomatic/yze-go-ptrrecv v0.3.0/go.mod h1:cDVU8F0gJKGUX/Ejnl1C/kPVJutY4HMWwPRs5+GiDew=
 github.com/gomatic/yze-go-slogkv v0.1.0 h1:mvIaAmr8a5VNiFHk2N0uoLi8ejDKYJ5H+H0m7engXyU=
