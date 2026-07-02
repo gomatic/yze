@@ -95,7 +95,7 @@ func action(_ context.Context, cmd *cli.Command) error {
 	if cfg.emitRules != "" {
 		return yze.EmitRules(cmd.Writer, cfg.emitRules, regs)
 	}
-	if err := configure(regs, cfg.config); err != nil {
+	if err := configure(regs, pathParam(cfg.config)); err != nil {
 		return err
 	}
 	sqlAnalyzers := yze.FilterSQL(yze.SQLAnalyzers(), cfg.categories)
@@ -283,12 +283,15 @@ func configFromCmd(cmd *cli.Command) config {
 	}
 }
 
+// pathParam names the path parameter of configure; rename it to the real domain concept.
+type pathParam string
+
 // configure applies per-analyzer settings from the config file, if one is given.
-func configure(regs []goyze.Registration, path string) error {
-	if path == "" {
+func configure(regs []goyze.Registration, path pathParam) error {
+	if string(path) == "" {
 		return nil
 	}
-	settings, err := yze.LoadConfig(readFile, path)
+	settings, err := yze.LoadConfig(readFile, string(path))
 	if err != nil {
 		return err
 	}
