@@ -30,8 +30,8 @@ github.com/gomatic/yze-go-jsontag v0.1.0 h1:kuoepLiq34U3Y+HrPXYpj1YkXKlmrP84xYMG
 github.com/gomatic/yze-go-jsontag v0.1.0/go.mod h1:3I2tmROrPJVuo/Z0TYZzkITi9GcVsT3ArehCG23gUJ0=
 github.com/gomatic/yze-go-layout v0.2.1 h1:rHLV4UU9f6AwMQDjgOAOmY1RmHG0GSgfCpCIWiWXJyA=
 github.com/gomatic/yze-go-layout v0.2.1/go.mod h1:v2/RitCem7MtAUq5pIxfGPOvWGye6+FB20wqIEBnjwE=
-github.com/gomatic/yze-go-namedtypes v0.5.0 h1:3chtKRkNVZZIEybqEBa/mB8JlF5QzMlHzJU8s9ukhwU=
-github.com/gomatic/yze-go-namedtypes v0.5.0/go.mod h1:Wu+9aDi2ovUnumvd7F/M9lXDvXndHJG5UTcVSczYhJk=
+github.com/gomatic/yze-go-namedtypes v0.5.1 h1:+NsfjAKJQziy7J3PtD7Oj2onhBsEsGRt6t9O8FOs8OA=
+github.com/gomatic/yze-go-namedtypes v0.5.1/go.mod h1:Wu+9aDi2ovUnumvd7F/M9lXDvXndHJG5UTcVSczYhJk=
 github.com/gomatic/yze-go-noinit v0.1.0 h1:u8hduOXEVWUgOKY/F/cRUDQ0AcynjUEEk+2e76O1lEU=
 github.com/gomatic/yze-go-noinit v0.1.0/go.mod h1:Mes/2lnPiTLXpaw2Yyu7Ys5vm3zaBmwlh5p4YjWKugA=
 github.com/gomatic/yze-go-nopanic v0.1.0 h1:OuVeE6mUa5oWZVbWfgnky3jZ65TWClfFxo6HaKXtqbE=
