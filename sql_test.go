@@ -112,3 +112,17 @@ func TestRunSQLPropagatesAnalyzerError(t *testing.T) {
 	_, err := RunSQL(os.ReadFile, filepath.WalkDir, SQLAnalyzers(), []string{dir})
 	require.Error(t, err)
 }
+
+func TestRunSQLPrunesFixtureAndHiddenDirs(t *testing.T) {
+	t.Parallel()
+	dir := t.TempDir()
+	for _, sub := range []string{"testdata", "vendor", ".hidden"} {
+		require.NoError(t, os.MkdirAll(filepath.Join(dir, sub), 0o755))
+		require.NoError(t, os.WriteFile(filepath.Join(dir, sub, "fixture.sql"), []byte("SELECT 1;"), 0o644))
+	}
+	require.NoError(t, os.WriteFile(filepath.Join(dir, "real.sql"), []byte("SELECT 1;"), 0o644))
+	report, err := RunSQL(os.ReadFile, filepath.WalkDir, SQLAnalyzers(), []string{dir})
+	require.NoError(t, err)
+	require.Len(t, report.Diagnostics, 1, "only real.sql is linted; testdata/vendor/hidden are pruned")
+	assert.Equal(t, filepath.Join(dir, "real.sql"), report.Diagnostics[0].Path)
+}

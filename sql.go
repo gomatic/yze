@@ -136,17 +136,37 @@ func collectUnder(walk WalkDir, root sqlRoot, files *[]string) error {
 }
 
 // appendSQLFiles is a walk callback that appends every .sql file it visits to
-// files.
+// files, pruning the directories Go tooling never lints: testdata (fixtures are
+// deliberate, often deliberately wrong), vendor, and hidden directories.
 func appendSQLFiles(files *[]string) fs.WalkDirFunc {
 	return func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		if !d.IsDir() && strings.HasSuffix(path, sqlExtension) {
-			*files = append(*files, path)
-		}
-		return nil
+		return visitSQLEntry(files, path, d)
 	}
+}
+
+// visitSQLEntry prunes exempt directories and collects .sql files.
+func visitSQLEntry(files *[]string, path string, d fs.DirEntry) error {
+	if d.IsDir() && prunedDir(dirName(d.Name())) {
+		return fs.SkipDir
+	}
+	if !d.IsDir() && strings.HasSuffix(path, sqlExtension) {
+		*files = append(*files, path)
+	}
+	return nil
+}
+
+// dirName is a directory's base name as seen by the walk.
+type dirName string
+
+// prunedDir reports whether a directory is exempt from SQL linting: test
+// fixtures, vendored code, and hidden trees — mirroring the go tool, which
+// never loads these.
+func prunedDir(name dirName) bool {
+	return name == "testdata" || name == "vendor" ||
+		(strings.HasPrefix(string(name), ".") && name != "." && name != "..")
 }
 
 // sqlPath is the path to one .sql file the suite analyzes.
