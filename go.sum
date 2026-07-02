@@ -26,8 +26,8 @@ github.com/gomatic/yze-go-globalvar v0.2.0 h1:AqzClYwIFEaOb/+b3lLjxLlTTG2S1z2iON
 github.com/gomatic/yze-go-globalvar v0.2.0/go.mod h1:3X1i2tH4wLGvcFFT0SQJdXqc8kiukSoZXDYOpJDl0hc=
 github.com/gomatic/yze-go-gotostmt v0.2.1 h1:pOV3xBRgRixt0eJNqEPQViswgUipx8nKCTJwBcE1W/E=
 github.com/gomatic/yze-go-gotostmt v0.2.1/go.mod h1:Xs3vuC+2FabNmnlXbYbwH6p1uPybMX/3cDtpSsTzGQE=
-github.com/gomatic/yze-go-jsontag v0.2.0 h1:rozIfsu1Wm707z9FoJrfBzI9sqpmP0I2xIU2z7TO1eE=
-github.com/gomatic/yze-go-jsontag v0.2.0/go.mod h1:3I2tmROrPJVuo/Z0TYZzkITi9GcVsT3ArehCG23gUJ0=
+github.com/gomatic/yze-go-jsontag v0.3.0 h1:wg4tO+0RUGZVk45jJAcSTHWI8Z8y7Sqkf91ctW6uafk=
+github.com/gomatic/yze-go-jsontag v0.3.0/go.mod h1:3I2tmROrPJVuo/Z0TYZzkITi9GcVsT3ArehCG23gUJ0=
 github.com/gomatic/yze-go-layout v0.2.1 h1:rHLV4UU9f6AwMQDjgOAOmY1RmHG0GSgfCpCIWiWXJyA=
 github.com/gomatic/yze-go-layout v0.2.1/go.mod h1:v2/RitCem7MtAUq5pIxfGPOvWGye6+FB20wqIEBnjwE=
 github.com/gomatic/yze-go-namedtypes v0.5.1 h1:+NsfjAKJQziy7J3PtD7Oj2onhBsEsGRt6t9O8FOs8OA=
@@ -40,8 +40,8 @@ github.com/gomatic/yze-go-pkgstd v0.3.0 h1:oysWs1BmrR0JX2nPo0H95h9gnoh681CD4Vzri
 github.com/gomatic/yze-go-pkgstd v0.3.0/go.mod h1:bJlYo4tcwpWg93MkHDXk8Gb8Xl80+b8QB3g2+WWxlv0=
 github.com/gomatic/yze-go-ptrparam v0.6.0 h1:NcOCdlO+amUOu15XZcRs4BN39JauEw58bqkI8HK+GkU=
 github.com/gomatic/yze-go-ptrparam v0.6.0/go.mod h1:NGd3X2j4R86MhHaweY83HFYtYTIN3DlK8ui8bcnwTTE=
-github.com/gomatic/yze-go-ptrrecv v0.3.0 h1:/GPYkIQ3vguxoLCCBSJuWZdrQw/D1l6sOoujaHgSpAY=
-github.com/gomatic/yze-go-ptrrecv v0.3.0/go.mod h1:cDVU8F0gJKGUX/Ejnl1C/kPVJutY4HMWwPRs5+GiDew=
+github.com/gomatic/yze-go-ptrrecv v0.4.0 h1:fI8fnMucM7OwuN3UpmTDAcxEB31hy7wrVMfO1ZRmqqA=
+github.com/gomatic/yze-go-ptrrecv v0.4.0/go.mod h1:cDVU8F0gJKGUX/Ejnl1C/kPVJutY4HMWwPRs5+GiDew=
 github.com/gomatic/yze-go-slogkv v0.1.0 h1:mvIaAmr8a5VNiFHk2N0uoLi8ejDKYJ5H+H0m7engXyU=
 github.com/gomatic/yze-go-slogkv v0.1.0/go.mod h1:DH/SUGeFklCkukgFQWk/IxVvkLavq47KUKztM/K/gpw=
 github.com/gomatic/yze-go-stdlog v0.2.1 h1:oYWXvvCNX0CMpAV74TmAXuhx10lI2sXGkROiBa9g4XA=
