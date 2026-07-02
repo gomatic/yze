@@ -1,0 +1,3 @@
+.PHONY: dry-run
+dry-run: ## Fleet dry-run: diff this working tree's suite against the pinned yze over every fleet repo
+	go run dryrun.go
