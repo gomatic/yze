@@ -97,7 +97,7 @@ func RunSQL(read goyze.FileReader, walk WalkDir, analyzers []SQLAnalyzer, roots 
 	}
 	report := goyze.Report{}
 	for _, file := range files {
-		diags, err := analyzeSQLFile(read, analyzers, fileParam(file))
+		diags, err := analyzeSQLFile(read, analyzers, sqlPath(file))
 		if err != nil {
 			return goyze.Report{}, err
 		}
@@ -110,21 +110,21 @@ func RunSQL(read goyze.FileReader, walk WalkDir, analyzers []SQLAnalyzer, roots 
 func sqlFiles(walk WalkDir, roots []string) ([]string, error) {
 	var files []string
 	for _, root := range roots {
-		if err := collectUnder(walk, rootParam(root), &files); err != nil {
+		if err := collectUnder(walk, sqlRoot(root), &files); err != nil {
 			return nil, err
 		}
 	}
 	return files, nil
 }
 
-// rootParam names the root parameter of collectUnder; rename it to the real domain concept.
-type rootParam string
+// sqlRoot is a directory root walked for .sql files.
+type sqlRoot string
 
 // collectUnder appends the .sql files under one root to files. A root that doesn't
 // exist is not an error — a Go package pattern like "./foo/..." need not name a
 // real directory, and a tree with no SQL simply contributes none — so it's
 // skipped; any other walk failure is wrapped in [ErrSQLWalk].
-func collectUnder(walk WalkDir, root rootParam, files *[]string) error {
+func collectUnder(walk WalkDir, root sqlRoot, files *[]string) error {
 	err := walk(string(root), appendSQLFiles(files))
 	if errors.Is(err, fs.ErrNotExist) {
 		return nil
@@ -149,13 +149,13 @@ func appendSQLFiles(files *[]string) fs.WalkDirFunc {
 	}
 }
 
-// fileParam names the file parameter of analyzeSQLFile; rename it to the real domain concept.
-type fileParam string
+// sqlPath is the path to one .sql file the suite analyzes.
+type sqlPath string
 
 // analyzeSQLFile reads one file and runs every analyzer over it, collecting their
 // diagnostics. A read failure or an analyzer error (e.g. a lexical scan failure)
 // aborts.
-func analyzeSQLFile(read goyze.FileReader, analyzers []SQLAnalyzer, file fileParam) ([]goyze.Diagnostic, error) {
+func analyzeSQLFile(read goyze.FileReader, analyzers []SQLAnalyzer, file sqlPath) ([]goyze.Diagnostic, error) {
 	data, err := read(string(file))
 	if err != nil {
 		return nil, ErrSQLRead.With(err, "path", string(file))
