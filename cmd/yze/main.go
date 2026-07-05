@@ -95,13 +95,13 @@ func createApp() *cli.Command {
 func action(_ context.Context, cmd *cli.Command) error {
 	cfg := configFromCmd(cmd)
 	regs := yze.Filter(yze.Registrations(), cfg.categories)
+	sqlAnalyzers := yze.FilterSQL(yze.SQLAnalyzers(), cfg.categories)
 	if cfg.emitRules != "" {
-		return yze.EmitRules(cmd.Writer, cfg.emitRules, regs)
+		return yze.EmitRules(cmd.Writer, cfg.emitRules, yze.CatalogRules(regs, sqlAnalyzers))
 	}
-	if err := configure(regs, configPath(cfg.config)); err != nil {
+	if err := configure(regs, sqlAnalyzers, configPath(cfg.config)); err != nil {
 		return err
 	}
-	sqlAnalyzers := yze.FilterSQL(yze.SQLAnalyzers(), cfg.categories)
 	report, err := runAll(regs, sqlAnalyzers, cfg.patterns)
 	if err != nil {
 		return err
@@ -224,10 +224,10 @@ func fixpoint(
 	}
 }
 
-// applyRound applies one round's suggested fixes and returns the result
-// alongside the fixes it applied (for file accounting).
+// applyRound applies one round's preferred suggested fixes and returns the
+// result alongside the fixes it applied (for file accounting).
 func applyRound(report goyze.Report) (goyze.FixResult, []goyze.Fix, error) {
-	fixes := allFixes(report)
+	fixes := preferredFixes(report)
 	result, err := goyze.ApplyFixes(readFile, writeFile, goyze.GoFormat, fixes)
 	return result, fixes, err
 }
@@ -290,7 +290,10 @@ func configFromCmd(cmd *cli.Command) config {
 type configPath string
 
 // configure applies per-analyzer settings from the config file, if one is given.
-func configure(regs []goyze.Registration, path configPath) error {
+// Go settings apply to the registrations' analyzer flags; the SQL analyzers define
+// no settings, so a config block supplying one for a bundled SQL analyzer is
+// rejected explicitly rather than silently ignored.
+func configure(regs []goyze.Registration, sqlAnalyzers []yze.SQLAnalyzer, path configPath) error {
 	if string(path) == "" {
 		return nil
 	}
@@ -298,7 +301,10 @@ func configure(regs []goyze.Registration, path configPath) error {
 	if err != nil {
 		return err
 	}
-	return goyze.ApplyConfig(regs, settings)
+	if err := goyze.ApplyConfig(regs, settings); err != nil {
+		return err
+	}
+	return yze.ApplySQLConfig(sqlAnalyzers, settings)
 }
 
 func toCategories(values []string) []goyze.Category {
@@ -321,10 +327,17 @@ func patternsOf(args []string) []goyze.Pattern {
 	return patterns
 }
 
-func allFixes(report goyze.Report) []goyze.Fix {
-	var fixes []goyze.Fix
+// preferredFixes collects each diagnostic's preferred suggested fix — the first
+// one only. go/analysis defines a diagnostic's SuggestedFixes as alternative
+// strategies of which "at most one may be applied", so applying every alternative
+// would stack conflicting rewrites of the same source range; the first is the
+// analyzer's preferred strategy.
+func preferredFixes(report goyze.Report) []goyze.Fix {
+	fixes := make([]goyze.Fix, 0, len(report.Diagnostics))
 	for _, d := range report.Diagnostics {
-		fixes = append(fixes, d.Fixes...)
+		if len(d.Fixes) > 0 {
+			fixes = append(fixes, d.Fixes[0])
+		}
 	}
 	return fixes
 }

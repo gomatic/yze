@@ -25,11 +25,22 @@ const sqlExtension = ".sql"
 
 // SQLAnalyzer is a source analyzer the suite runs over .sql files, as opposed to
 // the go/analysis analyzers it runs over Go packages. Its diagnostics already use
-// the shared go-yze contract, so they merge into the same report.
+// the shared go-yze contract, so they merge into the same report; Doc and URL are
+// the catalog metadata mirroring [goyze.Registration], so the rule exports list
+// SQL rules alongside the Go ones.
 type SQLAnalyzer struct {
 	Analyze    func(path, source string) ([]goyze.Diagnostic, error)
 	Name       goyze.AnalyzerName
+	Doc        string
+	URL        goyze.HelpURL
 	Categories []goyze.Category
+}
+
+// RuleID returns the stable rule identifier "yze/<name>" carried by every
+// diagnostic the analyzer emits, mirroring [goyze.Registration.RuleID] so both
+// languages share one flat id scheme.
+func (a SQLAnalyzer) RuleID() string {
+	return "yze/" + string(a.Name)
 }
 
 // WalkDir is [fs.WalkDir]'s signature. It's injected so a test can drive the file
@@ -42,6 +53,8 @@ func SQLAnalyzers() []SQLAnalyzer {
 	return []SQLAnalyzer{
 		{
 			Name:       keywordcase.Name,
+			Doc:        "reports SQL keywords that are not written in lowercase, per the gomatic SQL standard",
+			URL:        "https://docs.gomatic.dev/yze/keywordcase",
 			Categories: []goyze.Category{keywordcase.Category},
 			Analyze: func(path, source string) ([]goyze.Diagnostic, error) {
 				return keywordcase.Diagnostics(keywordcase.Path(path), sql.SQL(source))

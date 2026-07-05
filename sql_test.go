@@ -38,6 +38,9 @@ func TestSQLAnalyzersBundlesKeywordcase(t *testing.T) {
 	require.Len(t, analyzers, 1)
 	assert.Equal(t, goyze.AnalyzerName("keywordcase"), analyzers[0].Name)
 	assert.Equal(t, []goyze.Category{"sql"}, analyzers[0].Categories)
+	assert.NotEmpty(t, analyzers[0].Doc, "every bundled analyzer carries catalog metadata")
+	assert.Equal(t, goyze.HelpURL("https://docs.gomatic.dev/yze/keywordcase"), analyzers[0].URL)
+	assert.Equal(t, "yze/keywordcase", analyzers[0].RuleID(), "the flat rule-id scheme mirrors goyze.Registration")
 }
 
 func TestFilterSQLByCategory(t *testing.T) {

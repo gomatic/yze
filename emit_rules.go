@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"slices"
+	"strings"
 
 	errs "github.com/gomatic/go-error"
 	goyze "github.com/gomatic/go-yze"
@@ -13,7 +15,7 @@ import (
 const ErrUnknownRuleFormat errs.Const = "unknown rule-export format"
 
 // RuleFormat names a way the suite's rule catalog is exported. The catalog is built
-// from registration metadata (id, name, doc, url, categories) — never from analyzer
+// from catalog metadata (id, name, doc, url, categories) — never from analyzer
 // logic — so it carries no per-analyzer machinery.
 type RuleFormat string
 
@@ -31,13 +33,65 @@ const (
 // sarifSchemaURL is the SARIF 2.1.0 JSON-schema URL stamped into the log.
 const sarifSchemaURL = "https://json.schemastore.org/sarif-2.1.0.json"
 
-// EmitRules writes the suite's rule catalog to w in the named format.
-func EmitRules(w io.Writer, format RuleFormat, regs []goyze.Registration) error {
+// Rule is one catalog entry: the language-neutral metadata a rule export carries.
+// Both the Go analyzer registrations (via [GoRules]) and the SQL analyzers (via
+// [SQLRules]) reduce to this shape, so the exported catalog always describes the
+// whole suite — every rule id a diagnostic can carry has a catalog entry.
+type Rule struct {
+	ID         string
+	Name       string
+	Doc        string
+	URL        string
+	Categories []goyze.Category
+}
+
+// GoRules maps the Go analyzer registrations onto their catalog rules.
+func GoRules(regs []goyze.Registration) []Rule {
+	rules := make([]Rule, 0, len(regs))
+	for _, reg := range regs {
+		rules = append(rules, Rule{
+			ID:         reg.RuleID(),
+			Name:       string(reg.Name),
+			Doc:        docOf(reg),
+			URL:        string(reg.URL),
+			Categories: reg.Categories,
+		})
+	}
+	return rules
+}
+
+// SQLRules maps the SQL analyzers onto their catalog rules, under the same
+// "yze/<name>" rule-id scheme their diagnostics carry.
+func SQLRules(analyzers []SQLAnalyzer) []Rule {
+	rules := make([]Rule, 0, len(analyzers))
+	for _, a := range analyzers {
+		rules = append(rules, Rule{
+			ID:         a.RuleID(),
+			Name:       string(a.Name),
+			Doc:        a.Doc,
+			URL:        string(a.URL),
+			Categories: a.Categories,
+		})
+	}
+	return rules
+}
+
+// CatalogRules merges the Go and SQL analyzers' rules into the one catalog
+// `--emit-rules` exports, sorted by rule id so the export order is deterministic
+// regardless of which language contributed an entry.
+func CatalogRules(regs []goyze.Registration, analyzers []SQLAnalyzer) []Rule {
+	rules := append(GoRules(regs), SQLRules(analyzers)...)
+	slices.SortFunc(rules, func(a, b Rule) int { return strings.Compare(a.ID, b.ID) })
+	return rules
+}
+
+// EmitRules writes the rule catalog to w in the named format.
+func EmitRules(w io.Writer, format RuleFormat, rules []Rule) error {
 	switch format {
 	case RuleFormatSARIF:
-		return emitSARIFRules(w, regs)
+		return emitSARIFRules(w, rules)
 	case RuleFormatGrit:
-		return emitGritRules(w, regs)
+		return emitGritRules(w, rules)
 	default:
 		return ErrUnknownRuleFormat.With(nil, "format", string(format))
 	}
@@ -81,40 +135,40 @@ type sarifRuleProps struct {
 
 // emitSARIFRules writes the catalog as a SARIF log whose single run carries every
 // rule under tool.driver.rules.
-func emitSARIFRules(w io.Writer, regs []goyze.Registration) error {
-	rules := make([]sarifRule, 0, len(regs))
-	for _, reg := range regs {
-		rules = append(rules, sarifRuleOf(reg))
+func emitSARIFRules(w io.Writer, rules []Rule) error {
+	out := make([]sarifRule, 0, len(rules))
+	for _, rule := range rules {
+		out = append(out, sarifRuleOf(rule))
 	}
 	log := sarifLog{
 		Schema:  sarifSchemaURL,
 		Version: "2.1.0",
-		Runs:    []sarifRun{{Tool: sarifTool{Driver: sarifDriver{Name: "yze", Rules: rules}}}},
+		Runs:    []sarifRun{{Tool: sarifTool{Driver: sarifDriver{Name: "yze", Rules: out}}}},
 	}
 	encoder := json.NewEncoder(w)
 	encoder.SetIndent("", "  ")
 	return encoder.Encode(log)
 }
 
-// sarifRuleOf maps one registration's metadata onto a SARIF rule.
-func sarifRuleOf(reg goyze.Registration) sarifRule {
+// sarifRuleOf maps one catalog rule's metadata onto a SARIF rule.
+func sarifRuleOf(rule Rule) sarifRule {
 	return sarifRule{
-		ID:               reg.RuleID(),
-		Name:             string(reg.Name),
-		ShortDescription: sarifText{Text: docOf(reg)},
-		HelpURI:          string(reg.URL),
-		Properties:       sarifRuleProps{Tags: tagsOf(reg.Categories)},
+		ID:               rule.ID,
+		Name:             rule.Name,
+		ShortDescription: sarifText{Text: rule.Doc},
+		HelpURI:          rule.URL,
+		Properties:       sarifRuleProps{Tags: tagsOf(rule.Categories)},
 	}
 }
 
 // emitGritRules writes the catalog as a GritQL-style markdown registry: one entry
 // per rule with its id, description, docs link, and categories.
-func emitGritRules(w io.Writer, regs []goyze.Registration) error {
+func emitGritRules(w io.Writer, rules []Rule) error {
 	if _, err := fmt.Fprint(w, "# yze rule catalog\n\n"); err != nil {
 		return err
 	}
-	for _, reg := range regs {
-		if err := writeGritRule(w, reg); err != nil {
+	for _, rule := range rules {
+		if err := writeGritRule(w, rule); err != nil {
 			return err
 		}
 	}
@@ -122,9 +176,9 @@ func emitGritRules(w io.Writer, regs []goyze.Registration) error {
 }
 
 // writeGritRule writes one rule's markdown registry entry.
-func writeGritRule(w io.Writer, reg goyze.Registration) error {
+func writeGritRule(w io.Writer, rule Rule) error {
 	_, err := fmt.Fprintf(w, "## `%s`\n\n%s\n\n- docs: %s\n- categories: %s\n\n",
-		reg.RuleID(), docOf(reg), string(reg.URL), categoryList(reg.Categories))
+		rule.ID, rule.Doc, rule.URL, categoryList(rule.Categories))
 	return err
 }
 

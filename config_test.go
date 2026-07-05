@@ -34,6 +34,26 @@ func TestLoadConfigReportsReadError(t *testing.T) {
 	assert.True(t, errors.Is(err, yze.ErrConfig))
 }
 
+func TestApplySQLConfigRejectsSettingsForBundledAnalyzer(t *testing.T) {
+	err := yze.ApplySQLConfig(yze.SQLAnalyzers(), goyze.Settings{
+		"keywordcase": goyze.AnalyzerSettings{"style": "upper"},
+	})
+
+	require.Error(t, err)
+	assert.True(t, errors.Is(err, yze.ErrSQLSetting))
+	assert.Contains(t, err.Error(), "keywordcase")
+}
+
+func TestApplySQLConfigIgnoresUnknownAnalyzerAndEmptyBlock(t *testing.T) {
+	// Mirrors goyze.ApplyConfig: an unknown analyzer name is ignored (a config may
+	// target a larger suite than is present), and a block with no settings is a
+	// no-op even for a bundled SQL analyzer.
+	require.NoError(t, yze.ApplySQLConfig(yze.SQLAnalyzers(), goyze.Settings{
+		"someother":   goyze.AnalyzerSettings{"x": "y"},
+		"keywordcase": goyze.AnalyzerSettings{},
+	}))
+}
+
 func TestLoadConfigReportsParseError(t *testing.T) {
 	read := func(string) ([]byte, error) { return []byte("analyzers: [not a map"), nil }
 

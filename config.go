@@ -8,8 +8,14 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// ErrConfig reports a yze configuration file that cannot be read or parsed.
-const ErrConfig errs.Const = "cannot load yze config"
+// Configuration errors.
+const (
+	// ErrConfig reports a yze configuration file that cannot be read or parsed.
+	ErrConfig errs.Const = "cannot load yze config"
+	// ErrSQLSetting reports a config setting supplied for a bundled SQL analyzer,
+	// none of which defines any settings.
+	ErrSQLSetting errs.Const = "SQL analyzer settings are not supported"
+)
 
 // fileConfig is the on-disk yze config shape: per-analyzer settings, each a list
 // of strings (joined into the analyzer's flag value).
@@ -33,6 +39,20 @@ func LoadConfig(read func(path string) ([]byte, error), path ConfigPath) (goyze.
 		return nil, ErrConfig.With(err, "path", path)
 	}
 	return flatten(parsed), nil
+}
+
+// ApplySQLConfig checks settings against the suite's SQL analyzers, mirroring
+// [goyze.ApplyConfig]'s semantics: an unknown analyzer name is ignored (a config
+// may target a larger suite than is present), but a setting supplied for a known
+// analyzer must be one it defines — and the SQL analyzers define none, so any
+// setting targeting one is [ErrSQLSetting] rather than a silent no-op.
+func ApplySQLConfig(analyzers []SQLAnalyzer, settings goyze.Settings) error {
+	for _, a := range analyzers {
+		for key := range settings[a.Name] {
+			return ErrSQLSetting.With(nil, "analyzer", a.Name, "setting", key)
+		}
+	}
+	return nil
 }
 
 // flatten joins each setting's list of values into the comma-separated value the

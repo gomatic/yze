@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"slices"
 	"strings"
 	"testing"
 
@@ -43,9 +44,69 @@ func sampleRegs() []goyze.Registration {
 	}
 }
 
+// sampleRules is a catalog spanning both languages: the Go registrations above
+// plus one SQL-style rule carrying two categories (exercising the category join).
+func sampleRules() []yze.Rule {
+	return append(yze.GoRules(sampleRegs()), yze.Rule{
+		ID:         "yze/keywordcase",
+		Name:       "keywordcase",
+		Doc:        "bans uppercase SQL keywords",
+		URL:        "https://docs.gomatic.dev/yze/keywordcase",
+		Categories: []goyze.Category{"sql", "style"},
+	})
+}
+
+func TestGoRulesMapsRegistrationMetadata(t *testing.T) {
+	rules := yze.GoRules(sampleRegs())
+
+	require.Len(t, rules, 2)
+	assert.Equal(t, yze.Rule{
+		ID:         "yze/errconst",
+		Name:       "errconst",
+		Doc:        "bans errors.New",
+		URL:        "https://docs.gomatic.dev/yze/errconst",
+		Categories: []goyze.Category{"errors"},
+	}, rules[0])
+	assert.Equal(t, "yze/gotostmt", rules[1].ID)
+	assert.Empty(t, rules[1].Categories)
+}
+
+func TestGoRulesOmitsDocForNilAnalyzer(t *testing.T) {
+	rules := yze.GoRules([]goyze.Registration{{Name: "bare"}})
+
+	require.Len(t, rules, 1)
+	assert.Equal(t, "yze/bare", rules[0].ID)
+	assert.Empty(t, rules[0].Doc)
+}
+
+func TestSQLRulesMapsAnalyzerMetadata(t *testing.T) {
+	rules := yze.SQLRules(yze.SQLAnalyzers())
+
+	require.Len(t, rules, 1)
+	rule := rules[0]
+	assert.Equal(t, "yze/keywordcase", rule.ID)
+	assert.Equal(t, "keywordcase", rule.Name)
+	assert.NotEmpty(t, rule.Doc, "the catalog entry must describe the rule")
+	assert.Equal(t, "https://docs.gomatic.dev/yze/keywordcase", rule.URL)
+	assert.Equal(t, []goyze.Category{"sql"}, rule.Categories)
+}
+
+func TestCatalogRulesMergesBothLanguagesSortedByID(t *testing.T) {
+	rules := yze.CatalogRules(yze.Registrations(), yze.SQLAnalyzers())
+
+	assert.Len(t, rules, 23, "the full suite: 22 Go analyzers + 1 SQL analyzer")
+	ids := make([]string, 0, len(rules))
+	for _, rule := range rules {
+		ids = append(ids, rule.ID)
+	}
+	assert.True(t, slices.IsSorted(ids), "the catalog is in rule-id order")
+	assert.Contains(t, ids, "yze/keywordcase")
+	assert.Contains(t, ids, "yze/errconst")
+}
+
 func TestEmitRulesSARIF(t *testing.T) {
 	var buf bytes.Buffer
-	require.NoError(t, yze.EmitRules(&buf, yze.RuleFormatSARIF, sampleRegs()))
+	require.NoError(t, yze.EmitRules(&buf, yze.RuleFormatSARIF, sampleRules()))
 
 	var log struct {
 		Schema  string `json:"$schema"`
@@ -75,25 +136,23 @@ func TestEmitRulesSARIF(t *testing.T) {
 	require.Len(t, log.Runs, 1)
 	driver := log.Runs[0].Tool.Driver
 	assert.Equal(t, "yze", driver.Name)
-	require.Len(t, driver.Rules, 2)
+	require.Len(t, driver.Rules, 3)
 	assert.Equal(t, "yze/errconst", driver.Rules[0].ID)
 	assert.Equal(t, "errconst", driver.Rules[0].Name)
 	assert.Equal(t, "bans errors.New", driver.Rules[0].ShortDescription.Text)
 	assert.Equal(t, "https://docs.gomatic.dev/yze/errconst", driver.Rules[0].HelpURI)
 	assert.Equal(t, []string{"errors"}, driver.Rules[0].Properties.Tags)
 	assert.Empty(t, driver.Rules[1].Properties.Tags)
-}
-
-func TestEmitRulesSARIFOmitsDocForNilAnalyzer(t *testing.T) {
-	var buf bytes.Buffer
-	regs := []goyze.Registration{{Name: "bare"}}
-	require.NoError(t, yze.EmitRules(&buf, yze.RuleFormatSARIF, regs))
-	assert.Contains(t, buf.String(), `"text": ""`)
+	assert.Equal(t, "yze/keywordcase", driver.Rules[2].ID)
+	assert.Equal(t, "keywordcase", driver.Rules[2].Name)
+	assert.Equal(t, "bans uppercase SQL keywords", driver.Rules[2].ShortDescription.Text)
+	assert.Equal(t, "https://docs.gomatic.dev/yze/keywordcase", driver.Rules[2].HelpURI)
+	assert.Equal(t, []string{"sql", "style"}, driver.Rules[2].Properties.Tags)
 }
 
 func TestEmitRulesGrit(t *testing.T) {
 	var buf bytes.Buffer
-	require.NoError(t, yze.EmitRules(&buf, yze.RuleFormatGrit, sampleRegs()))
+	require.NoError(t, yze.EmitRules(&buf, yze.RuleFormatGrit, sampleRules()))
 
 	out := buf.String()
 	assert.True(t, strings.HasPrefix(out, "# yze rule catalog"))
@@ -103,25 +162,29 @@ func TestEmitRulesGrit(t *testing.T) {
 	assert.Contains(t, out, "- categories: errors")
 	assert.Contains(t, out, "## `yze/gotostmt`")
 	assert.Contains(t, out, "- categories: none")
+	assert.Contains(t, out, "## `yze/keywordcase`")
+	assert.Contains(t, out, "bans uppercase SQL keywords")
+	assert.Contains(t, out, "- docs: https://docs.gomatic.dev/yze/keywordcase")
+	assert.Contains(t, out, "- categories: sql, style", "multiple categories join with a comma")
 }
 
 func TestEmitRulesUnknownFormat(t *testing.T) {
-	err := yze.EmitRules(&bytes.Buffer{}, "yaml", sampleRegs())
+	err := yze.EmitRules(&bytes.Buffer{}, "yaml", sampleRules())
 	assert.True(t, errors.Is(err, yze.ErrUnknownRuleFormat))
 }
 
 func TestEmitRulesSARIFSurfacesWriteError(t *testing.T) {
-	err := yze.EmitRules(&nthFailWriter{ok: 0}, yze.RuleFormatSARIF, sampleRegs())
+	err := yze.EmitRules(&nthFailWriter{ok: 0}, yze.RuleFormatSARIF, sampleRules())
 	assert.Error(t, err)
 }
 
 func TestEmitRulesGritSurfacesHeaderWriteError(t *testing.T) {
-	err := yze.EmitRules(&nthFailWriter{ok: 0}, yze.RuleFormatGrit, sampleRegs())
+	err := yze.EmitRules(&nthFailWriter{ok: 0}, yze.RuleFormatGrit, sampleRules())
 	assert.Error(t, err)
 }
 
 func TestEmitRulesGritSurfacesRuleWriteError(t *testing.T) {
 	// Header write succeeds; the first rule write fails.
-	err := yze.EmitRules(&nthFailWriter{ok: 1}, yze.RuleFormatGrit, sampleRegs())
+	err := yze.EmitRules(&nthFailWriter{ok: 1}, yze.RuleFormatGrit, sampleRules())
 	assert.Error(t, err)
 }

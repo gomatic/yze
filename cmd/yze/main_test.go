@@ -70,6 +70,7 @@ func TestActionEmitRulesSARIF(t *testing.T) {
 	require.NoError(t, err)
 	assert.Contains(t, out, `"$schema"`)
 	assert.Contains(t, out, `"yze/errconst"`)
+	assert.Contains(t, out, `"yze/keywordcase"`, "the SQL analyzers are part of the catalog")
 }
 
 func TestActionEmitRulesGrit(t *testing.T) {
@@ -78,6 +79,15 @@ func TestActionEmitRulesGrit(t *testing.T) {
 	require.NoError(t, err)
 	assert.Contains(t, out, "# yze rule catalog")
 	assert.Contains(t, out, "yze/errconst")
+	assert.Contains(t, out, "yze/keywordcase", "the SQL analyzers are part of the catalog")
+}
+
+func TestActionEmitRulesAppliesCategoryFilter(t *testing.T) {
+	out, err := runApp(t, appName, "--emit-rules", "grit", "--category", "sql")
+
+	require.NoError(t, err)
+	assert.Contains(t, out, "yze/keywordcase")
+	assert.NotContains(t, out, "yze/errconst")
 }
 
 func TestActionEmitsTextFormat(t *testing.T) {
@@ -484,6 +494,70 @@ func TestActionReportsConfigApplyError(t *testing.T) {
 	_, err := runApp(t, appName, "--config", "yze.yaml")
 
 	require.Error(t, err)
+}
+
+func TestActionRejectsSQLAnalyzerConfigSettings(t *testing.T) {
+	// The SQL analyzers define no settings, so a config block that supplies one
+	// for a bundled SQL analyzer must error, not silently no-op.
+	swapDriver(t, emptyDriver())
+	swapReadFile(t, "analyzers:\n  keywordcase:\n    style:\n      - upper\n", nil)
+
+	_, err := runApp(t, appName, "--config", "yze.yaml")
+
+	require.ErrorIs(t, err, yze.ErrSQLSetting)
+}
+
+// alternativesDriver returns one diagnostic carrying two alternative suggested
+// fixes on the first call and a clean result afterwards. go/analysis defines a
+// diagnostic's SuggestedFixes as alternative strategies of which at most one may
+// be applied, so the run must apply only the first.
+func alternativesDriver(t *testing.T) goyze.Driver {
+	t.Helper()
+	fset, f := fileSet(t)
+	count := 0
+	return func(_ []goyze.Registration, _ []goyze.Pattern) (*token.FileSet, []goyze.DriverResult, error) {
+		count++
+		if count > 1 {
+			return fset, nil, nil
+		}
+		return fset, []goyze.DriverResult{{
+			Registration: sampleReg(),
+			Diagnostics: []analysis.Diagnostic{{
+				Pos:     f.Pos(0),
+				Message: "boom",
+				SuggestedFixes: []analysis.SuggestedFix{
+					{
+						Message:   "rename to q",
+						TextEdits: []analysis.TextEdit{{Pos: f.Pos(8), End: f.Pos(9), NewText: []byte("q")}},
+					},
+					{
+						Message:   "rename to r",
+						TextEdits: []analysis.TextEdit{{Pos: f.Pos(8), End: f.Pos(9), NewText: []byte("r")}},
+					},
+				},
+			}},
+		}}, nil
+	}
+}
+
+func TestActionFixAppliesOnlyFirstSuggestedFix(t *testing.T) {
+	swapDriver(t, alternativesDriver(t))
+	swapReadFile(t, "package p\n", nil)
+	written := map[string]string{}
+	swapWriteFile(t, func(path string, data []byte) error {
+		written[path] = string(data)
+		return nil
+	})
+	swapVerifier(t, func(_ []goyze.Pattern) (goyze.VerifyResult, error) {
+		return goyze.VerifyResult{}, nil
+	})
+
+	out, err := runApp(t, appName, "--fix")
+
+	require.NoError(t, err)
+	assert.Equal(t, "applied 1 edit(s) across 1 file(s) in 1 round(s)\n", out)
+	assert.Equal(t, map[string]string{"p.go": "package q\n"}, written,
+		"only the first alternative is applied; the second would conflict")
 }
 
 // sqlDir writes a single .sql file with the given contents into a fresh temp dir
