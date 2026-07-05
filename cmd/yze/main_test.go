@@ -119,7 +119,7 @@ func TestActionAppliesCategoryFilter(t *testing.T) {
 	_, err := runApp(t, appName, "--category", "errors")
 
 	require.NoError(t, err)
-	require.Len(t, captured, 2)
+	require.Len(t, captured, 3)
 	assert.Equal(t, "yze/errconst", captured[0].RuleID())
 }
 
