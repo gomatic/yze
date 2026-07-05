@@ -18,8 +18,8 @@ github.com/gomatic/yze-go-ctxfirst v0.2.1 h1:0WpPcn4dbefAyHqZM4rFudAH8ZH6He6HSZW
 github.com/gomatic/yze-go-ctxfirst v0.2.1/go.mod h1:xrFhAZi6c9y37vjJif4qwJ6mMNb5jTwD8vztXkD/b2M=
 github.com/gomatic/yze-go-emptyiface v0.2.1 h1:LwMH7JyEgZj2/mBHENBwFrm7D+LGEx4Pxy5AWtGuQ/k=
 github.com/gomatic/yze-go-emptyiface v0.2.1/go.mod h1:gSnVet2uFUuL0HY/JDqkyfJQdQ7LVeGALH4MWSjEbow=
-github.com/gomatic/yze-go-errconst v0.2.2 h1:g9xZhuBL5NRMOrXdcXkEyaHhmEVrNYueLd8cZjCJPgw=
-github.com/gomatic/yze-go-errconst v0.2.2/go.mod h1:G2vpsOxB8eOgcoDUOBNWXPFA6FRSrRzydIw9rV3dhWk=
+github.com/gomatic/yze-go-errconst v0.3.0 h1:aRSv7Cej2bq0B/DJ8xvQEOux5Q7pgD7+1//6LTQJVjA=
+github.com/gomatic/yze-go-errconst v0.3.0/go.mod h1:G2vpsOxB8eOgcoDUOBNWXPFA6FRSrRzydIw9rV3dhWk=
 github.com/gomatic/yze-go-errlast v0.2.1 h1:t5jegczaRIU5UMnJHWRIGl+bRn6JLiZn+5+0qe2HYg8=
 github.com/gomatic/yze-go-errlast v0.2.1/go.mod h1:wQ8Rd5ZLhSa5igDOvYuR+TWPEDuNKd4DlqZJi57QWWU=
 github.com/gomatic/yze-go-globalvar v0.2.0 h1:AqzClYwIFEaOb/+b3lLjxLlTTG2S1z2iONcrsso87qs=

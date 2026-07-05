@@ -12,7 +12,7 @@ require (
 	github.com/gomatic/yze-go-cliversion v0.2.1
 	github.com/gomatic/yze-go-ctxfirst v0.2.1
 	github.com/gomatic/yze-go-emptyiface v0.2.1
-	github.com/gomatic/yze-go-errconst v0.2.2
+	github.com/gomatic/yze-go-errconst v0.3.0
 	github.com/gomatic/yze-go-errlast v0.2.1
 	github.com/gomatic/yze-go-globalvar v0.2.0
 	github.com/gomatic/yze-go-gotostmt v0.2.1
