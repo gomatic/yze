@@ -10,8 +10,8 @@ github.com/gomatic/yze-go-anonstruct v0.2.5 h1:6eQfyLLYmX3HDz/T8XMt76OhXHSCkLTcz
 github.com/gomatic/yze-go-anonstruct v0.2.5/go.mod h1:rVm0STgrctBhiG9Lb+p9LwY0/5BkJm24S/A68rSKK5M=
 github.com/gomatic/yze-go-boolname v0.4.6 h1:JJ0ygSPLge7zByjFUg0IICpBESt0zd3HRl53o1wCMFY=
 github.com/gomatic/yze-go-boolname v0.4.6/go.mod h1:0yc4wvJ2bAeOU9xwTE8PLY+jOVVSJxW89uvShNycKHs=
-github.com/gomatic/yze-go-cliv3 v0.2.4 h1:unbbHtkHsTTrP55p22rMvWl1TPMu35uOKS16qBGJRmk=
-github.com/gomatic/yze-go-cliv3 v0.2.4/go.mod h1:QZq1OT3LGXoqofIS78pjgn6aNhrfns8e/uBcL06KDxM=
+github.com/gomatic/yze-go-cliv3 v0.2.5 h1:eaVzeiIy4v6AeUUGA6q3mVfUQoI+rNLMOsKfXRxngW4=
+github.com/gomatic/yze-go-cliv3 v0.2.5/go.mod h1:QZq1OT3LGXoqofIS78pjgn6aNhrfns8e/uBcL06KDxM=
 github.com/gomatic/yze-go-cliversion v0.2.4 h1:ftBIuJVMLcwajMeRu/pLmO21NKqUDKDhAXGRrwyhDAw=
 github.com/gomatic/yze-go-cliversion v0.2.4/go.mod h1:p1lNFpw5lXUi2ctGz3YKBLzxGK1rKq8gvzvxdVt/xw4=
 github.com/gomatic/yze-go-ctxfirst v0.2.4 h1:RqV8L6KkkR5vvXV4f4j/YWZFVyjMsywxHTbz5aE+7RU=
@@ -28,10 +28,10 @@ github.com/gomatic/yze-go-globalvar v0.2.4 h1:h56bhuESKYko9m/p4FGSyLrxk6ja/Vfov1
 github.com/gomatic/yze-go-globalvar v0.2.4/go.mod h1:3X1i2tH4wLGvcFFT0SQJdXqc8kiukSoZXDYOpJDl0hc=
 github.com/gomatic/yze-go-gotostmt v0.2.3 h1:ra2dx1Ek4WbuffVuuzI+LUdP6pl6euf9cSyoHpL26ws=
 github.com/gomatic/yze-go-gotostmt v0.2.3/go.mod h1:Xs3vuC+2FabNmnlXbYbwH6p1uPybMX/3cDtpSsTzGQE=
-github.com/gomatic/yze-go-jsontag v0.3.3 h1:aJ3MHCoOUCAYxQ8HI+tHdtPevn5uPlhgKNeXgVLhZ28=
-github.com/gomatic/yze-go-jsontag v0.3.3/go.mod h1:3I2tmROrPJVuo/Z0TYZzkITi9GcVsT3ArehCG23gUJ0=
-github.com/gomatic/yze-go-layout v0.2.7 h1:N61PI6h+RWItYi4lMKeeax3HsAme3XdydZvG4cSdHsE=
-github.com/gomatic/yze-go-layout v0.2.7/go.mod h1:v2/RitCem7MtAUq5pIxfGPOvWGye6+FB20wqIEBnjwE=
+github.com/gomatic/yze-go-jsontag v0.3.5 h1:8qF5BICVLqujCVqN9D/qEnZsud6BSsZHVbv+C3cz5N4=
+github.com/gomatic/yze-go-jsontag v0.3.5/go.mod h1:3I2tmROrPJVuo/Z0TYZzkITi9GcVsT3ArehCG23gUJ0=
+github.com/gomatic/yze-go-layout v0.2.8 h1:rarap18ID+jI0kkhELVXDVVHCQJg5FGukgIA18I96E4=
+github.com/gomatic/yze-go-layout v0.2.8/go.mod h1:v2/RitCem7MtAUq5pIxfGPOvWGye6+FB20wqIEBnjwE=
 github.com/gomatic/yze-go-namedtypes v0.5.5 h1:KxERovmv6xhJLm8aM7g9g8G8YJGcm/vim6bLrJ/s9uA=
 github.com/gomatic/yze-go-namedtypes v0.5.5/go.mod h1:Wu+9aDi2ovUnumvd7F/M9lXDvXndHJG5UTcVSczYhJk=
 github.com/gomatic/yze-go-noinit v0.1.3 h1:L5PhruScqLB1hkdcqo7iTlTIRBuU1vsiVgFo9hGIhXA=
