@@ -3,9 +3,9 @@ module github.com/gomatic/yze
 go 1.26.4
 
 require (
-	github.com/gomatic/go-error v0.3.0
-	github.com/gomatic/go-sql v0.0.2
-	github.com/gomatic/go-yze v0.8.2
+	github.com/gomatic/go-error v0.3.10
+	github.com/gomatic/go-sql v0.1.15
+	github.com/gomatic/go-yze v0.8.12
 	github.com/gomatic/yze-go-anonstruct v0.2.5
 	github.com/gomatic/yze-go-boolname v0.4.6
 	github.com/gomatic/yze-go-cliv3 v0.2.5
@@ -32,7 +32,7 @@ require (
 	github.com/gomatic/yze-sql-keywordcase v0.4.4
 	github.com/stretchr/testify v1.11.1
 	github.com/urfave/cli/v3 v3.10.1
-	golang.org/x/tools v0.47.0
+	golang.org/x/tools v0.48.0
 )
 
 require (
@@ -43,7 +43,7 @@ require (
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	golang.org/x/mod v0.37.0 // indirect
-	golang.org/x/sync v0.21.0 // indirect
+	golang.org/x/mod v0.38.0 // indirect
+	golang.org/x/sync v0.22.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1
 )
