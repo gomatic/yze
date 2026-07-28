@@ -19,6 +19,7 @@ import (
 	errtested "github.com/gomatic/yze-go-errtested"
 	globalvar "github.com/gomatic/yze-go-globalvar"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
+	invariant "github.com/gomatic/yze-go-invariant"
 	jsontag "github.com/gomatic/yze-go-jsontag"
 	layout "github.com/gomatic/yze-go-layout"
 	namedtypes "github.com/gomatic/yze-go-namedtypes"
@@ -33,9 +34,38 @@ import (
 	valuector "github.com/gomatic/yze-go-valuector"
 )
 
-// Registrations returns every analyzer in the suite, in stable rule-id order.
+// sourceOnly names the analyzers whose rules are about PRODUCTION design and are
+// therefore wrong when applied to test code.
+//
+// Test code is a different kind of code. A table-driven test's anonymous struct
+// is the Go idiom, not a defect; `want` is a fine boolean field name; a test
+// double may construct an ad-hoc error; a test helper may take a bare string.
+// Enforcing the production shape rules there would ban the table-driven test —
+// the very idiom the testing standard is built around.
+//
+// This mirrors the long-standing golangci policy of giving test files a lighter
+// touch. yze never needed the equivalent because its driver could not see test
+// files at all; once it could, 74% of the newly-reported findings across the
+// fleet came from these rules meeting test code for the first time — a policy
+// change nobody had decided.
+//
+// Analyzers absent from this set report everywhere, which is the default: a
+// scope is opted into, never inherited by accident.
+var sourceOnly = map[goyze.AnalyzerName]bool{
+	"anonstruct": true,
+	"boolname":   true,
+	"emptyiface": true,
+	"errconst":   true,
+	"namedtypes": true,
+	"ptrparam":   true,
+	"ptrrecv":    true,
+	"valuector":  true,
+}
+
+// Registrations returns every analyzer in the suite, in stable rule-id order,
+// each carrying the test-file scope its rule warrants.
 func Registrations() []goyze.Registration {
-	return []goyze.Registration{
+	return withScopes([]goyze.Registration{
 		anonstruct.Registration,
 		boolname.Registration,
 		cliv3.Registration,
@@ -48,6 +78,7 @@ func Registrations() []goyze.Registration {
 		errtested.Registration,
 		globalvar.Registration,
 		gotostmt.Registration,
+		invariant.Registration,
 		jsontag.Registration,
 		layout.Registration,
 		namedtypes.Registration,
@@ -60,7 +91,19 @@ func Registrations() []goyze.Registration {
 		stdlog.Registration,
 		testfile.Registration,
 		valuector.Registration,
+	})
+}
+
+// withScopes stamps the test-file policy onto each registration.
+func withScopes(regs []goyze.Registration) []goyze.Registration {
+	out := make([]goyze.Registration, 0, len(regs))
+	for _, r := range regs {
+		if sourceOnly[r.Name] {
+			r = r.WithTestScope(goyze.TestScopeSourceOnly)
+		}
+		out = append(out, r)
 	}
+	return out
 }
 
 // Filter selects the registrations matching the given categories. An empty

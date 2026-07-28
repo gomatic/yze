@@ -4,8 +4,8 @@ github.com/gomatic/go-error v0.3.10 h1:qvLwADrl+X3yRJ81a9NSMCGXGNWQ1LIvA5XY+l1Fs
 github.com/gomatic/go-error v0.3.10/go.mod h1:vH7CFid9QE33lC7DQAjEajERg85PtTQzM8+pGTS5rac=
 github.com/gomatic/go-sql v0.1.15 h1:9XOZiH2mAj9rGrJTp0lVA04MuyBav5cZAR3DieG6/pQ=
 github.com/gomatic/go-sql v0.1.15/go.mod h1:IaasUpq5WpiYw9+7N/xo5W7sP15hUpEj2UOtlqfE5tE=
-github.com/gomatic/go-yze v0.8.13 h1:ZWiGxcJzI9aQjrccAZ44KEWlXFRmnrTXBntIW/48dvA=
-github.com/gomatic/go-yze v0.8.13/go.mod h1:BnhJLsAEu9wc0eCL4SOFOM/2yMowkSh8jz6okklSCLQ=
+github.com/gomatic/go-yze v0.9.0 h1:JZlOawqLCfsTbbZDAGJgz4NAp/s9BvLzy8Zzz0u2fuc=
+github.com/gomatic/go-yze v0.9.0/go.mod h1:BnhJLsAEu9wc0eCL4SOFOM/2yMowkSh8jz6okklSCLQ=
 github.com/gomatic/yze-go-anonstruct v0.2.5 h1:6eQfyLLYmX3HDz/T8XMt76OhXHSCkLTczbCIJ81Zow0=
 github.com/gomatic/yze-go-anonstruct v0.2.5/go.mod h1:rVm0STgrctBhiG9Lb+p9LwY0/5BkJm24S/A68rSKK5M=
 github.com/gomatic/yze-go-boolname v0.4.6 h1:JJ0ygSPLge7zByjFUg0IICpBESt0zd3HRl53o1wCMFY=
@@ -30,6 +30,8 @@ github.com/gomatic/yze-go-globalvar v0.2.4 h1:h56bhuESKYko9m/p4FGSyLrxk6ja/Vfov1
 github.com/gomatic/yze-go-globalvar v0.2.4/go.mod h1:3X1i2tH4wLGvcFFT0SQJdXqc8kiukSoZXDYOpJDl0hc=
 github.com/gomatic/yze-go-gotostmt v0.2.3 h1:ra2dx1Ek4WbuffVuuzI+LUdP6pl6euf9cSyoHpL26ws=
 github.com/gomatic/yze-go-gotostmt v0.2.3/go.mod h1:Xs3vuC+2FabNmnlXbYbwH6p1uPybMX/3cDtpSsTzGQE=
+github.com/gomatic/yze-go-invariant v0.1.0 h1:c7CRWFKcnrkfE7A6qgti5ZRzcHt+7vA+h6hRv5kq2Ww=
+github.com/gomatic/yze-go-invariant v0.1.0/go.mod h1:U54BTr4+jf1hKjz737sVpOwKrdenG1pDoiofof3QwCs=
 github.com/gomatic/yze-go-jsontag v0.3.5 h1:8qF5BICVLqujCVqN9D/qEnZsud6BSsZHVbv+C3cz5N4=
 github.com/gomatic/yze-go-jsontag v0.3.5/go.mod h1:3I2tmROrPJVuo/Z0TYZzkITi9GcVsT3ArehCG23gUJ0=
 github.com/gomatic/yze-go-layout v0.2.8 h1:rarap18ID+jI0kkhELVXDVVHCQJg5FGukgIA18I96E4=
