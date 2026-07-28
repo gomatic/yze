@@ -16,6 +16,7 @@ import (
 	errconst "github.com/gomatic/yze-go-errconst"
 	errlast "github.com/gomatic/yze-go-errlast"
 	errtest "github.com/gomatic/yze-go-errtest"
+	errtested "github.com/gomatic/yze-go-errtested"
 	globalvar "github.com/gomatic/yze-go-globalvar"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
 	jsontag "github.com/gomatic/yze-go-jsontag"
@@ -44,6 +45,7 @@ func Registrations() []goyze.Registration {
 		errconst.Registration,
 		errlast.Registration,
 		errtest.Registration,
+		errtested.Registration,
 		globalvar.Registration,
 		gotostmt.Registration,
 		jsontag.Registration,
