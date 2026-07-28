@@ -15,7 +15,7 @@ require (
 	github.com/gomatic/yze-go-errconst v0.3.1
 	github.com/gomatic/yze-go-errlast v0.2.4
 	github.com/gomatic/yze-go-errtest v0.1.0
-	github.com/gomatic/yze-go-errtested v0.0.0-20260728152017-39157dc6384f
+	github.com/gomatic/yze-go-errtested v0.1.0
 	github.com/gomatic/yze-go-globalvar v0.2.4
 	github.com/gomatic/yze-go-gotostmt v0.2.3
 	github.com/gomatic/yze-go-jsontag v0.3.5
