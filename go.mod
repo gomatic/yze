@@ -16,11 +16,11 @@ require (
 	github.com/gomatic/yze-go-errconst v0.3.1
 	github.com/gomatic/yze-go-errlast v0.2.4
 	github.com/gomatic/yze-go-errtest v0.1.11
-	github.com/gomatic/yze-go-errtested v0.1.0
+	github.com/gomatic/yze-go-errtested v0.1.5
 	github.com/gomatic/yze-go-filesize v0.1.0
 	github.com/gomatic/yze-go-globalvar v0.2.4
 	github.com/gomatic/yze-go-gotostmt v0.2.3
-	github.com/gomatic/yze-go-invariant v0.1.0
+	github.com/gomatic/yze-go-invariant v0.1.3
 	github.com/gomatic/yze-go-jsontag v0.3.5
 	github.com/gomatic/yze-go-layout v0.2.8
 	github.com/gomatic/yze-go-namedtypes v0.5.5
