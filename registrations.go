@@ -50,14 +50,24 @@ import (
 // fleet came from these rules meeting test code for the first time — a policy
 // change nobody had decided.
 //
+// The architectural rules (cliversion, layout, pkgstd) belong here for the same
+// reason as the shape rules: they judge how the PRODUCTION program is wired and
+// laid out. A test may build a bare urfave/cli command as a flag-parsing
+// harness — it has no business setting a Version — and a command package's test
+// may import its domain package however it likes. Judging those reported 37
+// findings across the fleet, every one of them in a _test.go file.
+//
 // Analyzers absent from this set report everywhere, which is the default: a
 // scope is opted into, never inherited by accident.
 var sourceOnly = map[goyze.AnalyzerName]bool{
 	"anonstruct": true,
 	"boolname":   true,
+	"cliversion": true,
 	"emptyiface": true,
 	"errconst":   true,
+	"layout":     true,
 	"namedtypes": true,
+	"pkgstd":     true,
 	"ptrparam":   true,
 	"ptrrecv":    true,
 	"valuector":  true,
