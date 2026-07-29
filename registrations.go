@@ -9,6 +9,7 @@ import (
 	goyze "github.com/gomatic/go-yze"
 	anonstruct "github.com/gomatic/yze-go-anonstruct"
 	boolname "github.com/gomatic/yze-go-boolname"
+	cliopinion "github.com/gomatic/yze-go-cliopinion"
 	cliv3 "github.com/gomatic/yze-go-cliv3"
 	cliversion "github.com/gomatic/yze-go-cliversion"
 	ctxfirst "github.com/gomatic/yze-go-ctxfirst"
@@ -62,6 +63,7 @@ import (
 var sourceOnly = map[goyze.AnalyzerName]bool{
 	"anonstruct": true,
 	"boolname":   true,
+	"cliopinion": true,
 	"cliversion": true,
 	"emptyiface": true,
 	"errconst":   true,
@@ -79,6 +81,7 @@ func Registrations() []goyze.Registration {
 	return withScopes([]goyze.Registration{
 		anonstruct.Registration,
 		boolname.Registration,
+		cliopinion.Registration,
 		cliv3.Registration,
 		cliversion.Registration,
 		ctxfirst.Registration,

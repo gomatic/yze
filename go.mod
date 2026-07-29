@@ -5,9 +5,10 @@ go 1.26.4
 require (
 	github.com/gomatic/go-error v0.3.10
 	github.com/gomatic/go-sql v0.1.15
-	github.com/gomatic/go-yze v0.9.0
+	github.com/gomatic/go-yze v0.9.3
 	github.com/gomatic/yze-go-anonstruct v0.2.5
 	github.com/gomatic/yze-go-boolname v0.4.6
+	github.com/gomatic/yze-go-cliopinion v0.1.0
 	github.com/gomatic/yze-go-cliv3 v0.2.5
 	github.com/gomatic/yze-go-cliversion v0.2.4
 	github.com/gomatic/yze-go-ctxfirst v0.2.4
