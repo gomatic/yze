@@ -94,7 +94,7 @@ func TestSQLRulesMapsAnalyzerMetadata(t *testing.T) {
 func TestCatalogRulesMergesBothLanguagesSortedByID(t *testing.T) {
 	rules := yze.CatalogRules(yze.Registrations(), yze.SQLAnalyzers())
 
-	assert.Len(t, rules, 26, "the full suite: 25 Go analyzers + 1 SQL analyzer")
+	assert.Len(t, rules, 27, "the full suite: 26 Go analyzers + 1 SQL analyzer")
 	ids := make([]string, 0, len(rules))
 	for _, rule := range rules {
 		ids = append(ids, rule.ID)

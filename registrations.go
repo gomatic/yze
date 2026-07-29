@@ -17,6 +17,7 @@ import (
 	errlast "github.com/gomatic/yze-go-errlast"
 	errtest "github.com/gomatic/yze-go-errtest"
 	errtested "github.com/gomatic/yze-go-errtested"
+	filesize "github.com/gomatic/yze-go-filesize"
 	globalvar "github.com/gomatic/yze-go-globalvar"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
 	invariant "github.com/gomatic/yze-go-invariant"
@@ -76,6 +77,7 @@ func Registrations() []goyze.Registration {
 		errlast.Registration,
 		errtest.Registration,
 		errtested.Registration,
+		filesize.Registration,
 		globalvar.Registration,
 		gotostmt.Registration,
 		invariant.Registration,

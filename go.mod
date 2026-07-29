@@ -16,6 +16,7 @@ require (
 	github.com/gomatic/yze-go-errlast v0.2.4
 	github.com/gomatic/yze-go-errtest v0.1.0
 	github.com/gomatic/yze-go-errtested v0.1.0
+	github.com/gomatic/yze-go-filesize v0.1.0
 	github.com/gomatic/yze-go-globalvar v0.2.4
 	github.com/gomatic/yze-go-gotostmt v0.2.3
 	github.com/gomatic/yze-go-invariant v0.1.0
@@ -29,7 +30,7 @@ require (
 	github.com/gomatic/yze-go-ptrrecv v0.4.3
 	github.com/gomatic/yze-go-slogkv v0.1.3
 	github.com/gomatic/yze-go-stdlog v0.2.3
-	github.com/gomatic/yze-go-testfile v0.2.7
+	github.com/gomatic/yze-go-testfile v0.2.18
 	github.com/gomatic/yze-go-valuector v0.1.4
 	github.com/gomatic/yze-sql-keywordcase v0.4.4
 	github.com/stretchr/testify v1.11.1

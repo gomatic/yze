@@ -34,6 +34,7 @@ func TestRegistrationsCatalog(t *testing.T) {
 			"yze/errlast",
 			"yze/errtest",
 			"yze/errtested",
+			"yze/filesize",
 			"yze/globalvar",
 			"yze/gotostmt",
 			"yze/invariant",
@@ -71,5 +72,5 @@ func TestFilterByMultipleCategories(t *testing.T) {
 }
 
 func TestFilterWithNoConstraintsKeepsAll(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), nil), 25)
+	assert.Len(t, yze.Filter(yze.Registrations(), nil), 26)
 }
