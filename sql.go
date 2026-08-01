@@ -175,11 +175,22 @@ func (c sqlCollector) visit(path string, d fs.DirEntry, err error) error {
 // dirName is a directory's base name as seen by the walk.
 type dirName string
 
+// The directories a SQL walk skips, named so the walk and its tests share one
+// definition of "exempt".
+const (
+	// fixturesDir holds deliberately-malformed inputs; a finding there
+	// describes the fixture rather than a defect.
+	fixturesDir dirName = "testdata"
+	// vendorDir holds code this repository does not own.
+	vendorDir dirName = "vendor"
+)
+
 // prunedDir reports whether a directory is exempt from SQL linting: test
 // fixtures, vendored code, and hidden trees — mirroring the go tool, which
-// never loads these.
+// never loads these. "." and ".." are NOT hidden trees; pruning "." would prune
+// the walk root and report a clean tree for a repository full of SQL.
 func prunedDir(name dirName) bool {
-	return name == "testdata" || name == "vendor" ||
+	return name == fixturesDir || name == vendorDir ||
 		(strings.HasPrefix(string(name), ".") && name != "." && name != "..")
 }
 

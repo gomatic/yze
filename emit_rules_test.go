@@ -188,3 +188,50 @@ func TestEmitRulesGritSurfacesRuleWriteError(t *testing.T) {
 	err := yze.EmitRules(&nthFailWriter{ok: 1}, yze.RuleFormatGrit, sampleRules())
 	assert.Error(t, err)
 }
+
+// TestRuleFormatCatalogIsBuiltFromMetadataOnly names RuleFormat's claim: the
+// exported catalog is built from registration metadata — id, name, doc, url,
+// categories — and never from analyzer logic. It matters because the catalog is
+// what an editor or a code-scanning platform registers rules from: if building
+// it required running or reflecting on analyzers, exporting the catalog could
+// fail, hang, or differ between machines for a document that is supposed to be
+// a static description of the suite.
+//
+// The observable form of "metadata only" is determinism and completeness: every
+// registered rule appears, with its own id, and repeated exports are identical.
+func TestRuleFormatCatalogIsBuiltFromMetadataOnly(t *testing.T) {
+	t.Parallel()
+
+	for _, format := range []yze.RuleFormat{yze.RuleFormatSARIF, yze.RuleFormatGrit} {
+		t.Run(string(format), func(t *testing.T) {
+			t.Parallel()
+			var first bytes.Buffer
+			require.NoError(t, yze.EmitRules(&first, format, yze.GoRules(yze.Registrations())))
+
+			for _, r := range yze.Registrations() {
+				assert.Contains(t, first.String(), r.RuleID(),
+					"every registered rule must appear in the %s catalog", format)
+			}
+
+			for range 5 {
+				var again bytes.Buffer
+				require.NoError(t, yze.EmitRules(&again, format, yze.GoRules(yze.Registrations())))
+				assert.Equal(t, first.String(), again.String(),
+					"a metadata-only catalog is byte-identical on every export")
+			}
+		})
+	}
+}
+
+// TestRuleFormatRejectsAnUnknownFormat pins the other half: an unrecognised
+// format is a matchable error, not an empty document. Emitting nothing for a
+// typo'd --emit-rules value would look like a suite with no rules.
+func TestRuleFormatRejectsAnUnknownFormat(t *testing.T) {
+	t.Parallel()
+	var out bytes.Buffer
+
+	err := yze.EmitRules(&out, yze.RuleFormat("yaml"), yze.GoRules(yze.Registrations()))
+
+	assert.ErrorIs(t, err, yze.ErrUnknownRuleFormat)
+	assert.Empty(t, out.String(), "nothing may be written for a format that was refused")
+}

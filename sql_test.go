@@ -1,6 +1,7 @@
 package yze
 
 import (
+	"errors"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -129,3 +130,71 @@ func TestRunSQLPrunesFixtureAndHiddenDirs(t *testing.T) {
 	require.Len(t, report.Diagnostics, 1, "only real.sql is linted; testdata/vendor/hidden are pruned")
 	assert.Equal(t, filepath.Join(dir, "real.sql"), report.Diagnostics[0].Path)
 }
+
+// TestPrunedDirMirrorsWhatTheGoToolNeverLoads names prunedDir's claim. Each
+// pruned directory is a place where linting would be actively wrong rather than
+// merely noisy: testdata fixtures are frequently INTENTIONALLY malformed (that
+// is what makes them fixtures), vendor is someone else's code this repo does
+// not own, and hidden trees are tooling state. Reporting in any of them
+// produces findings nobody can act on, which is how a gate gets ignored.
+//
+// The dot-directory rule must not swallow "." and ".." — pruning "." would
+// prune the walk root and collect nothing at all, silently reporting a clean
+// tree for a repository full of SQL.
+func TestPrunedDirMirrorsWhatTheGoToolNeverLoads(t *testing.T) {
+	t.Parallel()
+
+	for _, tc := range []struct {
+		name dirName
+		why  string
+		want bool
+	}{
+		{name: "testdata", want: true, why: "fixtures are deliberately wrong"},
+		{name: "vendor", want: true, why: "vendored code is not this repo's to fix"},
+		{name: ".git", want: true, why: "hidden trees are tooling state"},
+		{name: ".github", want: true, why: "any hidden directory, not a fixed list"},
+		{name: ".", want: false, why: "pruning the walk root would collect nothing at all"},
+		{name: "..", want: false, why: "and neither is the parent a hidden tree"},
+		{name: "sql", want: false, why: "an ordinary directory is walked"},
+		{name: "testdata2", want: false, why: "the match is exact, not a prefix"},
+		{name: "mytestdata", want: false, why: "and not a suffix either"},
+	} {
+		assert.Equal(t, tc.want, prunedDir(tc.name), "prunedDir(%q): %s", tc.name, tc.why)
+	}
+}
+
+// TestVisitPrunesAndCollectsWhatPrunedDirDecides names visit's claim, which is
+// the same rule seen from the walk: a pruned directory must return
+// fs.SkipDir — not merely "collect nothing" — because descending into a large
+// vendor or .git tree and filtering afterwards is the difference between a walk
+// and a crawl. It must also propagate the walk's own error rather than swallow
+// it, or an unreadable directory becomes a silently smaller file list.
+func TestVisitPrunesAndCollectsWhatPrunedDirDecides(t *testing.T) {
+	t.Parallel()
+
+	var files []string
+	collector := sqlCollector{files: &files}
+
+	assert.Equal(t, fs.SkipDir, collector.visit("a/vendor", dirEntry{name: "vendor", dir: true}, nil),
+		"a pruned directory must stop the descent, not just be ignored")
+	assert.NoError(t, collector.visit("a/sql", dirEntry{name: "sql", dir: true}, nil))
+
+	require.NoError(t, collector.visit("a/q.sql", dirEntry{name: "q.sql"}, nil))
+	require.NoError(t, collector.visit("a/notes.md", dirEntry{name: "notes.md"}, nil))
+	assert.Equal(t, []string{"a/q.sql"}, files, "only .sql files are collected")
+
+	boom := errors.New("permission denied")
+	assert.ErrorIs(t, collector.visit("a", dirEntry{name: "a", dir: true}, boom), boom,
+		"a walk error must surface, not shrink the file list in silence")
+}
+
+// dirEntry is a minimal fs.DirEntry for driving the walk callback directly.
+type dirEntry struct {
+	name string
+	dir  bool
+}
+
+func (e dirEntry) Name() string               { return e.name }
+func (e dirEntry) IsDir() bool                { return e.dir }
+func (e dirEntry) Type() fs.FileMode          { return 0 }
+func (e dirEntry) Info() (fs.FileInfo, error) { return nil, nil }
