@@ -78,14 +78,33 @@ func createApp() *cli.Command {
 		ExitErrHandler: func(context.Context, *cli.Command, error) {},
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:  "format",
-				Value: string(yze.FormatSticklerJSON),
-				Usage: "output format (stickler-json, text)",
+				Name:    "format",
+				Value:   string(yze.FormatSticklerJSON),
+				Sources: cli.EnvVars("YZE_FORMAT"),
+				Usage:   "output format (stickler-json, text)",
 			},
-			&cli.BoolFlag{Name: "fix", Usage: "apply suggested fixes in place"},
-			&cli.StringSliceFlag{Name: "category", Usage: "restrict to analyzers carrying any of these categories"},
-			&cli.StringFlag{Name: "config", Usage: "path to a yze config file (per-analyzer settings)"},
-			&cli.StringFlag{Name: "emit-rules", Usage: "export the rule catalog (sarif, grit) instead of running"},
+			&cli.BoolFlag{
+				Name:    "fix",
+				Sources: cli.EnvVars("YZE_FIX"),
+				Usage:   "apply suggested fixes in place",
+			},
+			&cli.StringSliceFlag{
+				Name:    "category",
+				Sources: cli.EnvVars("YZE_CATEGORY"),
+				Usage:   "restrict to analyzers carrying any of these categories",
+			},
+			&cli.StringFlag{
+				Name:    "config",
+				Value:   "",
+				Sources: cli.EnvVars("YZE_CONFIG"),
+				Usage:   "path to a yze config file (per-analyzer settings)",
+			},
+			&cli.StringFlag{
+				Name:    "emit-rules",
+				Value:   "",
+				Sources: cli.EnvVars("YZE_EMIT_RULES"),
+				Usage:   "export the rule catalog (sarif, grit) instead of running",
+			},
 		},
 		Action: action,
 	}

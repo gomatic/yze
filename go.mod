@@ -10,7 +10,7 @@ require (
 	github.com/gomatic/yze-go-boolname v0.4.6
 	github.com/gomatic/yze-go-cliapp v0.4.0
 	github.com/gomatic/yze-go-clidomain v0.2.0
-	github.com/gomatic/yze-go-cliflags v0.1.0
+	github.com/gomatic/yze-go-cliflags v0.1.1
 	github.com/gomatic/yze-go-cliv3 v0.2.5
 	github.com/gomatic/yze-go-cliversion v0.2.4
 	github.com/gomatic/yze-go-ctxfirst v0.2.4
