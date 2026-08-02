@@ -3,9 +3,9 @@ module github.com/gomatic/yze
 go 1.26.4
 
 require (
-	github.com/gomatic/go-error v0.3.10
+	github.com/gomatic/go-error v0.3.13
 	github.com/gomatic/go-sql v0.1.15
-	github.com/gomatic/go-yze v0.9.3
+	github.com/gomatic/go-yze v0.9.7
 	github.com/gomatic/yze-go-anonstruct v0.2.5
 	github.com/gomatic/yze-go-boolname v0.4.6
 	github.com/gomatic/yze-go-cliapp v0.4.2
@@ -15,11 +15,14 @@ require (
 	github.com/gomatic/yze-go-cliversion v0.2.4
 	github.com/gomatic/yze-go-ctxfirst v0.2.4
 	github.com/gomatic/yze-go-emptyiface v0.2.4
+	github.com/gomatic/yze-go-enumdiscrim v0.1.0
 	github.com/gomatic/yze-go-errconst v0.3.1
 	github.com/gomatic/yze-go-errlast v0.2.4
 	github.com/gomatic/yze-go-errtest v0.2.2
 	github.com/gomatic/yze-go-errtested v0.1.5
 	github.com/gomatic/yze-go-filesize v0.1.0
+	github.com/gomatic/yze-go-fuzzassert v0.1.0
+	github.com/gomatic/yze-go-fuzzreq v0.1.0
 	github.com/gomatic/yze-go-globalvar v0.2.4
 	github.com/gomatic/yze-go-gotostmt v0.2.3
 	github.com/gomatic/yze-go-invariant v0.1.3

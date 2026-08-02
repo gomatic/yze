@@ -33,11 +33,14 @@ func TestRegistrationsCatalog(t *testing.T) {
 			"yze/cliversion",
 			"yze/ctxfirst",
 			"yze/emptyiface",
+			"yze/enumdiscrim",
 			"yze/errconst",
 			"yze/errlast",
 			"yze/errtest",
 			"yze/errtested",
 			"yze/filesize",
+			"yze/fuzzassert",
+			"yze/fuzzreq",
 			"yze/globalvar",
 			"yze/gotostmt",
 			"yze/invariant",
@@ -73,7 +76,7 @@ func TestFilterByMultipleCategories(t *testing.T) {
 }
 
 func TestFilterWithNoConstraintsKeepsAll(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), nil), 27)
+	assert.Len(t, yze.Filter(yze.Registrations(), nil), 30)
 }
 
 // TestSourceOnlyIsOptedIntoNeverInherited names sourceOnly's claim. The scope

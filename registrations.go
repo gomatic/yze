@@ -16,11 +16,14 @@ import (
 	cliversion "github.com/gomatic/yze-go-cliversion"
 	ctxfirst "github.com/gomatic/yze-go-ctxfirst"
 	emptyiface "github.com/gomatic/yze-go-emptyiface"
+	enumdiscrim "github.com/gomatic/yze-go-enumdiscrim"
 	errconst "github.com/gomatic/yze-go-errconst"
 	errlast "github.com/gomatic/yze-go-errlast"
 	errtest "github.com/gomatic/yze-go-errtest"
 	errtested "github.com/gomatic/yze-go-errtested"
 	filesize "github.com/gomatic/yze-go-filesize"
+	fuzzassert "github.com/gomatic/yze-go-fuzzassert"
+	fuzzreq "github.com/gomatic/yze-go-fuzzreq"
 	globalvar "github.com/gomatic/yze-go-globalvar"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
 	invariant "github.com/gomatic/yze-go-invariant"
@@ -63,18 +66,19 @@ import (
 // Analyzers absent from this set report everywhere, which is the default: a
 // scope is opted into, never inherited by accident.
 var sourceOnly = map[goyze.AnalyzerName]bool{
-	"anonstruct": true,
-	"boolname":   true,
-	"cliapp":     true,
-	"clidomain":  true,
-	"cliflags":   true,
-	"cliversion": true,
-	"emptyiface": true,
-	"errconst":   true,
-	"namedtypes": true,
-	"ptrparam":   true,
-	"ptrrecv":    true,
-	"valuector":  true,
+	"anonstruct":  true,
+	"boolname":    true,
+	"cliapp":      true,
+	"clidomain":   true,
+	"cliflags":    true,
+	"cliversion":  true,
+	"emptyiface":  true,
+	"enumdiscrim": true,
+	"errconst":    true,
+	"namedtypes":  true,
+	"ptrparam":    true,
+	"ptrrecv":     true,
+	"valuector":   true,
 }
 
 // Registrations returns every analyzer in the suite, in stable rule-id order,
@@ -90,11 +94,14 @@ func Registrations() []goyze.Registration {
 		cliversion.Registration,
 		ctxfirst.Registration,
 		emptyiface.Registration,
+		enumdiscrim.Registration,
 		errconst.Registration,
 		errlast.Registration,
 		errtest.Registration,
 		errtested.Registration,
 		filesize.Registration,
+		fuzzassert.Registration,
+		fuzzreq.Registration,
 		globalvar.Registration,
 		gotostmt.Registration,
 		invariant.Registration,

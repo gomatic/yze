@@ -1,11 +1,11 @@
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/gomatic/go-error v0.3.10 h1:qvLwADrl+X3yRJ81a9NSMCGXGNWQ1LIvA5XY+l1FsYI=
-github.com/gomatic/go-error v0.3.10/go.mod h1:vH7CFid9QE33lC7DQAjEajERg85PtTQzM8+pGTS5rac=
+github.com/gomatic/go-error v0.3.13 h1:Q2PAw8lt87XGDZQorId6MeAmHRJxT47XOK5eVAs/lr4=
+github.com/gomatic/go-error v0.3.13/go.mod h1:QVlrIcHreFp6u7n5UZiez8+eDllnV8eWP3vlDHSWnCo=
 github.com/gomatic/go-sql v0.1.15 h1:9XOZiH2mAj9rGrJTp0lVA04MuyBav5cZAR3DieG6/pQ=
 github.com/gomatic/go-sql v0.1.15/go.mod h1:IaasUpq5WpiYw9+7N/xo5W7sP15hUpEj2UOtlqfE5tE=
-github.com/gomatic/go-yze v0.9.3 h1:ES4DnRUx4Ixtn67NuU/SYDi9OpjmWc0BTsyS+fEq8uk=
-github.com/gomatic/go-yze v0.9.3/go.mod h1:BnhJLsAEu9wc0eCL4SOFOM/2yMowkSh8jz6okklSCLQ=
+github.com/gomatic/go-yze v0.9.7 h1:/VC4BWHDCp8BuNYmhye6H/9ElwEmfz2Y+0qX52yfiBo=
+github.com/gomatic/go-yze v0.9.7/go.mod h1:BnhJLsAEu9wc0eCL4SOFOM/2yMowkSh8jz6okklSCLQ=
 github.com/gomatic/yze-go-anonstruct v0.2.5 h1:6eQfyLLYmX3HDz/T8XMt76OhXHSCkLTczbCIJ81Zow0=
 github.com/gomatic/yze-go-anonstruct v0.2.5/go.mod h1:rVm0STgrctBhiG9Lb+p9LwY0/5BkJm24S/A68rSKK5M=
 github.com/gomatic/yze-go-boolname v0.4.6 h1:JJ0ygSPLge7zByjFUg0IICpBESt0zd3HRl53o1wCMFY=
@@ -24,6 +24,8 @@ github.com/gomatic/yze-go-ctxfirst v0.2.4 h1:RqV8L6KkkR5vvXV4f4j/YWZFVyjMsywxHTb
 github.com/gomatic/yze-go-ctxfirst v0.2.4/go.mod h1:xrFhAZi6c9y37vjJif4qwJ6mMNb5jTwD8vztXkD/b2M=
 github.com/gomatic/yze-go-emptyiface v0.2.4 h1:bEXq67lrGBvs5RvESZ7EESiGr8fFnB/Tl9RPdf5tRJc=
 github.com/gomatic/yze-go-emptyiface v0.2.4/go.mod h1:gSnVet2uFUuL0HY/JDqkyfJQdQ7LVeGALH4MWSjEbow=
+github.com/gomatic/yze-go-enumdiscrim v0.1.0 h1:IinsB9CovdVL/C6A8sJzpFMxSX9NNATgUXxnYnQbSeA=
+github.com/gomatic/yze-go-enumdiscrim v0.1.0/go.mod h1:p1B6GmU2P6TYO4k30Ca6YoCj5HIQlp311v8YYB9CP2M=
 github.com/gomatic/yze-go-errconst v0.3.1 h1:8jVeUt/T4FonbiSs/XmJf62oaS95HiJekXXOb6Wd7Sw=
 github.com/gomatic/yze-go-errconst v0.3.1/go.mod h1:G2vpsOxB8eOgcoDUOBNWXPFA6FRSrRzydIw9rV3dhWk=
 github.com/gomatic/yze-go-errlast v0.2.4 h1:i80f5BSZaclPXYtzPNBoBKJ4TlmzlU9BYz+AhNukRNU=
@@ -34,6 +36,10 @@ github.com/gomatic/yze-go-errtested v0.1.5 h1:CvVqWn77mgi5joYxtr4f15FDQ4uSisFEbx
 github.com/gomatic/yze-go-errtested v0.1.5/go.mod h1:+KB6QXVB+bnKaD30UcU9PKGKS6r8sQ+5wTrTDIWpPdM=
 github.com/gomatic/yze-go-filesize v0.1.0 h1:YgV9B2unuGtf+G5zSAnlC+LgPC3mPwzTPKVB+fTUhJ4=
 github.com/gomatic/yze-go-filesize v0.1.0/go.mod h1:lNZXGGMtCwDchNMSBkd6GvS35oMZ1JMQ9EQiZPL+XqE=
+github.com/gomatic/yze-go-fuzzassert v0.1.0 h1:MYBqo/wDcYWOL7ZLsfrQiBK7kruGkt25JBzOcXZVBZs=
+github.com/gomatic/yze-go-fuzzassert v0.1.0/go.mod h1:OQaez+/H6AnpWOxsu8Yxvh76AqhXxJx34c5YGtHlmCU=
+github.com/gomatic/yze-go-fuzzreq v0.1.0 h1:uBojKMLnWufBzrXD7lcUCMwU5D7pWdNs/gBt3o+X7tY=
+github.com/gomatic/yze-go-fuzzreq v0.1.0/go.mod h1:XtMcDg77C7CM8d1iWBEdjVsrH24GlbuZleKu3cNfHTM=
 github.com/gomatic/yze-go-globalvar v0.2.4 h1:h56bhuESKYko9m/p4FGSyLrxk6ja/Vfov14UaTpdqVU=
 github.com/gomatic/yze-go-globalvar v0.2.4/go.mod h1:3X1i2tH4wLGvcFFT0SQJdXqc8kiukSoZXDYOpJDl0hc=
 github.com/gomatic/yze-go-gotostmt v0.2.3 h1:ra2dx1Ek4WbuffVuuzI+LUdP6pl6euf9cSyoHpL26ws=
