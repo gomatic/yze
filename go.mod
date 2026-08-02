@@ -5,7 +5,7 @@ go 1.26.4
 require (
 	github.com/gomatic/go-error v0.3.13
 	github.com/gomatic/go-sql v0.1.15
-	github.com/gomatic/go-yze v0.9.7
+	github.com/gomatic/go-yze v0.10.0
 	github.com/gomatic/yze-go-anonstruct v0.2.5
 	github.com/gomatic/yze-go-boolname v0.4.6
 	github.com/gomatic/yze-go-cliapp v0.4.2
@@ -35,7 +35,7 @@ require (
 	github.com/gomatic/yze-go-slogkv v0.1.3
 	github.com/gomatic/yze-go-stdlog v0.2.3
 	github.com/gomatic/yze-go-testfile v0.2.18
-	github.com/gomatic/yze-go-valuector v0.1.4
+	github.com/gomatic/yze-go-valuector v0.1.20
 	github.com/gomatic/yze-sql-keywordcase v0.4.4
 	github.com/stretchr/testify v1.11.1
 	github.com/urfave/cli/v3 v3.10.1
