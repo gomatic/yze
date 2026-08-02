@@ -8,7 +8,9 @@ require (
 	github.com/gomatic/go-yze v0.9.3
 	github.com/gomatic/yze-go-anonstruct v0.2.5
 	github.com/gomatic/yze-go-boolname v0.4.6
-	github.com/gomatic/yze-go-cliopinion v0.1.0
+	github.com/gomatic/yze-go-cliapp v0.4.0
+	github.com/gomatic/yze-go-clidomain v0.2.0
+	github.com/gomatic/yze-go-cliflags v0.1.0
 	github.com/gomatic/yze-go-cliv3 v0.2.5
 	github.com/gomatic/yze-go-cliversion v0.2.4
 	github.com/gomatic/yze-go-ctxfirst v0.2.4
@@ -22,11 +24,9 @@ require (
 	github.com/gomatic/yze-go-gotostmt v0.2.3
 	github.com/gomatic/yze-go-invariant v0.1.3
 	github.com/gomatic/yze-go-jsontag v0.3.5
-	github.com/gomatic/yze-go-layout v0.2.8
 	github.com/gomatic/yze-go-namedtypes v0.5.5
 	github.com/gomatic/yze-go-noinit v0.1.3
 	github.com/gomatic/yze-go-nopanic v0.1.3
-	github.com/gomatic/yze-go-pkgstd v0.3.5
 	github.com/gomatic/yze-go-ptrparam v0.6.4
 	github.com/gomatic/yze-go-ptrrecv v0.4.3
 	github.com/gomatic/yze-go-slogkv v0.1.3
