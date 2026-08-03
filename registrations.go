@@ -76,6 +76,11 @@ var sourceOnly = map[goyze.AnalyzerName]bool{
 	"emptyiface":  true,
 	"enumdiscrim": true,
 	"errconst":    true,
+	// A test file may alias an import for local clarity — the corpus's own
+	// cliapp fixture aliases the domain package `creation` in the test beside
+	// the `domain` the cliapp standard mandates in the source. Holding both to
+	// one spelling would pit two standards against each other.
+	"importalias": true,
 	"namedtypes":  true,
 	"ptrparam":    true,
 	"ptrrecv":     true,
