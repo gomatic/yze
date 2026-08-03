@@ -12,8 +12,8 @@ github.com/gomatic/yze-go-boolname v0.4.6 h1:JJ0ygSPLge7zByjFUg0IICpBESt0zd3HRl5
 github.com/gomatic/yze-go-boolname v0.4.6/go.mod h1:0yc4wvJ2bAeOU9xwTE8PLY+jOVVSJxW89uvShNycKHs=
 github.com/gomatic/yze-go-cliapp v0.4.2 h1:oK+A4TU4nzIWziUobDBSmoxJ28TJgOnNmOUJ4eNse7A=
 github.com/gomatic/yze-go-cliapp v0.4.2/go.mod h1:nst+IKjQCacF3Pxs8m6bHP9A8VVOjEn/NUBuW0SLGYs=
-github.com/gomatic/yze-go-clidomain v0.2.4 h1:an8d/+WGeUBxbm31+u1RToTSOlH6ZCFoo8LN8B6Xb/8=
-github.com/gomatic/yze-go-clidomain v0.2.4/go.mod h1:Q04H+3I+hKXGdOVDVCUG3gltXuh3XuL8F2FH5lH4bgg=
+github.com/gomatic/yze-go-clidomain v0.2.5 h1:eyDYd2d+NSCHAAaH+BOU5QSwj7YhyS0NV2ot0WtpBaY=
+github.com/gomatic/yze-go-clidomain v0.2.5/go.mod h1:Q04H+3I+hKXGdOVDVCUG3gltXuh3XuL8F2FH5lH4bgg=
 github.com/gomatic/yze-go-cliflags v0.2.1 h1:z/KZgePb5vUG5bpbdbmfjI8laVWnG16vS83Ak5Edugw=
 github.com/gomatic/yze-go-cliflags v0.2.1/go.mod h1:2MDMvzYKaYLsQ+mgqpiY7Jtk++ob1I7fEOjU8fvQhbk=
 github.com/gomatic/yze-go-cliv3 v0.2.5 h1:eaVzeiIy4v6AeUUGA6q3mVfUQoI+rNLMOsKfXRxngW4=
