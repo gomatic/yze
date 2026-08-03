@@ -32,8 +32,8 @@ github.com/gomatic/yze-go-errlast v0.2.4 h1:i80f5BSZaclPXYtzPNBoBKJ4TlmzlU9BYz+A
 github.com/gomatic/yze-go-errlast v0.2.4/go.mod h1:wQ8Rd5ZLhSa5igDOvYuR+TWPEDuNKd4DlqZJi57QWWU=
 github.com/gomatic/yze-go-errtest v0.2.5 h1:P0uc2eb2gsTZkqUxGB0zpH9m5TlhI1Gi/jwgWCFKQdw=
 github.com/gomatic/yze-go-errtest v0.2.5/go.mod h1:z08eknVSGcqkN6zECZn03Atqz0+c1NDSFe/csWMAj9c=
-github.com/gomatic/yze-go-errtested v0.1.9 h1:leURMrFzqX2wE6LIVtM5oKCJOQ7Zh1rAO190geWNvo4=
-github.com/gomatic/yze-go-errtested v0.1.9/go.mod h1:7LnHKL+yZlXBQuJXPmQH+ziBooQdpnLbbNTGLjbFf8g=
+github.com/gomatic/yze-go-errtested v0.1.10 h1:n8ufdh/BCXXshZgMLRGIHa5NlGsBuL+drDjy8XS9uSM=
+github.com/gomatic/yze-go-errtested v0.1.10/go.mod h1:7LnHKL+yZlXBQuJXPmQH+ziBooQdpnLbbNTGLjbFf8g=
 github.com/gomatic/yze-go-filesize v0.1.0 h1:YgV9B2unuGtf+G5zSAnlC+LgPC3mPwzTPKVB+fTUhJ4=
 github.com/gomatic/yze-go-filesize v0.1.0/go.mod h1:lNZXGGMtCwDchNMSBkd6GvS35oMZ1JMQ9EQiZPL+XqE=
 github.com/gomatic/yze-go-fuzzassert v0.1.3 h1:4GT5DuJxTOzM/yN+SEBcEC0gbC06Idi4hw5W8IpKyzY=

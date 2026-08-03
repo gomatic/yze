@@ -19,7 +19,7 @@ require (
 	github.com/gomatic/yze-go-errconst v0.3.1
 	github.com/gomatic/yze-go-errlast v0.2.4
 	github.com/gomatic/yze-go-errtest v0.2.5
-	github.com/gomatic/yze-go-errtested v0.1.9
+	github.com/gomatic/yze-go-errtested v0.1.10
 	github.com/gomatic/yze-go-filesize v0.1.0
 	github.com/gomatic/yze-go-fuzzassert v0.1.3
 	github.com/gomatic/yze-go-fuzzreq v0.1.0
