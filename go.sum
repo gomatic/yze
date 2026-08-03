@@ -44,6 +44,8 @@ github.com/gomatic/yze-go-globalvar v0.2.4 h1:h56bhuESKYko9m/p4FGSyLrxk6ja/Vfov1
 github.com/gomatic/yze-go-globalvar v0.2.4/go.mod h1:3X1i2tH4wLGvcFFT0SQJdXqc8kiukSoZXDYOpJDl0hc=
 github.com/gomatic/yze-go-gotostmt v0.2.3 h1:ra2dx1Ek4WbuffVuuzI+LUdP6pl6euf9cSyoHpL26ws=
 github.com/gomatic/yze-go-gotostmt v0.2.3/go.mod h1:Xs3vuC+2FabNmnlXbYbwH6p1uPybMX/3cDtpSsTzGQE=
+github.com/gomatic/yze-go-importalias v0.1.0 h1:4QRw9QK0KnUOEQwFcsLITvFQW9kkk2D3yzvFMQNxAc8=
+github.com/gomatic/yze-go-importalias v0.1.0/go.mod h1:AAsETHlZTVeHrbqMovwj7/qUSoJbtrDqskumLcy1mxU=
 github.com/gomatic/yze-go-invariant v0.1.6 h1:dZIR26wv978HSnH2wPbAEFyKq9BI67udRmpEg0PEOQQ=
 github.com/gomatic/yze-go-invariant v0.1.6/go.mod h1:bW+f9t54QzVxvPR/AdTM4b9+y+DqbrkeFlOdVaGD79E=
 github.com/gomatic/yze-go-jsontag v0.3.5 h1:8qF5BICVLqujCVqN9D/qEnZsud6BSsZHVbv+C3cz5N4=

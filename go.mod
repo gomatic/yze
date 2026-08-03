@@ -25,6 +25,7 @@ require (
 	github.com/gomatic/yze-go-fuzzreq v0.1.0
 	github.com/gomatic/yze-go-globalvar v0.2.4
 	github.com/gomatic/yze-go-gotostmt v0.2.3
+	github.com/gomatic/yze-go-importalias v0.1.0
 	github.com/gomatic/yze-go-invariant v0.1.6
 	github.com/gomatic/yze-go-jsontag v0.3.5
 	github.com/gomatic/yze-go-namedtypes v0.5.5

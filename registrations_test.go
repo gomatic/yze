@@ -43,6 +43,7 @@ func TestRegistrationsCatalog(t *testing.T) {
 			"yze/fuzzreq",
 			"yze/globalvar",
 			"yze/gotostmt",
+			"yze/importalias",
 			"yze/invariant",
 			"yze/jsontag",
 			"yze/namedtypes",
@@ -76,7 +77,7 @@ func TestFilterByMultipleCategories(t *testing.T) {
 }
 
 func TestFilterWithNoConstraintsKeepsAll(t *testing.T) {
-	assert.Len(t, yze.Filter(yze.Registrations(), nil), 30)
+	assert.Len(t, yze.Filter(yze.Registrations(), nil), 31)
 }
 
 // TestSourceOnlyIsOptedIntoNeverInherited names sourceOnly's claim. The scope

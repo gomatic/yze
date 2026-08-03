@@ -26,6 +26,7 @@ import (
 	fuzzreq "github.com/gomatic/yze-go-fuzzreq"
 	globalvar "github.com/gomatic/yze-go-globalvar"
 	gotostmt "github.com/gomatic/yze-go-gotostmt"
+	importalias "github.com/gomatic/yze-go-importalias"
 	invariant "github.com/gomatic/yze-go-invariant"
 	jsontag "github.com/gomatic/yze-go-jsontag"
 	namedtypes "github.com/gomatic/yze-go-namedtypes"
@@ -104,6 +105,7 @@ func Registrations() []goyze.Registration {
 		fuzzreq.Registration,
 		globalvar.Registration,
 		gotostmt.Registration,
+		importalias.Registration,
 		invariant.Registration,
 		jsontag.Registration,
 		namedtypes.Registration,
