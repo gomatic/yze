@@ -26,6 +26,7 @@ var (
 	readFile  goyze.FileReader = os.ReadFile
 	writeFile goyze.FileWriter = func(path string, data []byte) error { return osWriteFile(sourcePath(path), data) }
 	walkDir   yze.WalkDir      = filepath.WalkDir
+	ignoreSQL yze.CheckIgnore  = yze.GitCheckIgnore
 	errWriter io.Writer        = os.Stderr
 )
 
@@ -145,7 +146,7 @@ func runAll(regs []goyze.Registration, sqlAnalyzers []yze.SQLAnalyzer, patterns 
 		report.Diagnostics = append(report.Diagnostics, goReport.Diagnostics...)
 	}
 	if len(sqlAnalyzers) > 0 {
-		sqlReport, err := yze.RunSQL(readFile, walkDir, sqlAnalyzers, yze.RootsOf(patterns))
+		sqlReport, err := yze.RunSQL(readFile, walkDir, ignoreSQL, sqlAnalyzers, yze.RootsOf(patterns))
 		if err != nil {
 			return goyze.Report{}, err
 		}

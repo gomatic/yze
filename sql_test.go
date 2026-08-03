@@ -15,6 +15,10 @@ import (
 
 const boom errs.Const = "boom"
 
+// noIgnore is a CheckIgnore for tests whose fixtures are all owned source:
+// nothing is ignored and git is never consulted.
+func noIgnore([]string) (map[string]bool, error) { return map[string]bool{}, nil }
+
 // fakeEntry is a minimal non-directory fs.DirEntry for driving the walk callback
 // without a real tree.
 type fakeEntry struct{ name string }
@@ -63,7 +67,7 @@ func TestRootsOf(t *testing.T) {
 func TestRunSQLFlagsKeywordsAndIgnoresNonSQL(t *testing.T) {
 	t.Parallel()
 	dir := writeSQLDir(t, "SELECT 1 FROM t;")
-	report, err := RunSQL(os.ReadFile, filepath.WalkDir, SQLAnalyzers(), []string{dir})
+	report, err := RunSQL(os.ReadFile, filepath.WalkDir, noIgnore, SQLAnalyzers(), []string{dir})
 	require.NoError(t, err)
 	require.Len(t, report.Diagnostics, 2, "SELECT and FROM; the .txt file is ignored")
 	assert.Equal(t, "yze/keywordcase", report.Diagnostics[0].Rule)
@@ -72,7 +76,7 @@ func TestRunSQLFlagsKeywordsAndIgnoresNonSQL(t *testing.T) {
 func TestRunSQLCleanForLowercase(t *testing.T) {
 	t.Parallel()
 	dir := writeSQLDir(t, "select 1 from t;")
-	report, err := RunSQL(os.ReadFile, filepath.WalkDir, SQLAnalyzers(), []string{dir})
+	report, err := RunSQL(os.ReadFile, filepath.WalkDir, noIgnore, SQLAnalyzers(), []string{dir})
 	require.NoError(t, err)
 	assert.Empty(t, report.Diagnostics)
 }
@@ -81,7 +85,8 @@ func TestRunSQLSkipsMissingRoot(t *testing.T) {
 	t.Parallel()
 	// A pattern's directory need not exist on disk; a missing root is no SQL, not
 	// an error.
-	report, err := RunSQL(os.ReadFile, filepath.WalkDir, SQLAnalyzers(), []string{filepath.Join(t.TempDir(), "absent")})
+	absent := filepath.Join(t.TempDir(), "absent")
+	report, err := RunSQL(os.ReadFile, filepath.WalkDir, noIgnore, SQLAnalyzers(), []string{absent})
 	require.NoError(t, err)
 	assert.Empty(t, report.Diagnostics)
 }
@@ -89,7 +94,7 @@ func TestRunSQLSkipsMissingRoot(t *testing.T) {
 func TestRunSQLWrapsWalkError(t *testing.T) {
 	t.Parallel()
 	walk := func(string, fs.WalkDirFunc) error { return boom }
-	_, err := RunSQL(os.ReadFile, walk, SQLAnalyzers(), []string{"."})
+	_, err := RunSQL(os.ReadFile, walk, noIgnore, SQLAnalyzers(), []string{"."})
 	assert.ErrorIs(t, err, ErrSQLWalk)
 }
 
@@ -97,7 +102,7 @@ func TestRunSQLPropagatesWalkCallbackError(t *testing.T) {
 	t.Parallel()
 	// A walk that hands the callback an error (an unreadable directory entry).
 	walk := func(_ string, fn fs.WalkDirFunc) error { return fn("bad", nil, boom) }
-	_, err := RunSQL(os.ReadFile, walk, SQLAnalyzers(), []string{"."})
+	_, err := RunSQL(os.ReadFile, walk, noIgnore, SQLAnalyzers(), []string{"."})
 	assert.ErrorIs(t, err, ErrSQLWalk)
 }
 
@@ -105,7 +110,7 @@ func TestRunSQLWrapsReadError(t *testing.T) {
 	t.Parallel()
 	walk := func(_ string, fn fs.WalkDirFunc) error { return fn("x.sql", fakeEntry{name: "x.sql"}, nil) }
 	read := func(string) ([]byte, error) { return nil, boom }
-	_, err := RunSQL(read, walk, SQLAnalyzers(), []string{"."})
+	_, err := RunSQL(read, walk, noIgnore, SQLAnalyzers(), []string{"."})
 	assert.ErrorIs(t, err, ErrSQLRead)
 }
 
@@ -113,7 +118,7 @@ func TestRunSQLPropagatesAnalyzerError(t *testing.T) {
 	t.Parallel()
 	// An unterminated string literal is a lexical scan error from the analyzer.
 	dir := writeSQLDir(t, "select 'unterminated")
-	_, err := RunSQL(os.ReadFile, filepath.WalkDir, SQLAnalyzers(), []string{dir})
+	_, err := RunSQL(os.ReadFile, filepath.WalkDir, noIgnore, SQLAnalyzers(), []string{dir})
 	require.Error(t, err)
 }
 
@@ -125,7 +130,7 @@ func TestRunSQLPrunesFixtureAndHiddenDirs(t *testing.T) {
 		require.NoError(t, os.WriteFile(filepath.Join(dir, sub, "fixture.sql"), []byte("SELECT 1;"), 0o644))
 	}
 	require.NoError(t, os.WriteFile(filepath.Join(dir, "real.sql"), []byte("SELECT 1;"), 0o644))
-	report, err := RunSQL(os.ReadFile, filepath.WalkDir, SQLAnalyzers(), []string{dir})
+	report, err := RunSQL(os.ReadFile, filepath.WalkDir, noIgnore, SQLAnalyzers(), []string{dir})
 	require.NoError(t, err)
 	require.Len(t, report.Diagnostics, 1, "only real.sql is linted; testdata/vendor/hidden are pruned")
 	assert.Equal(t, filepath.Join(dir, "real.sql"), report.Diagnostics[0].Path)

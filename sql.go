@@ -104,13 +104,23 @@ func RootsOf(patterns []goyze.Pattern) []string {
 	return roots
 }
 
-// RunSQL finds every .sql file under the roots and runs the analyzers over each,
-// returning the merged diagnostics. A walk or read failure aborts the run.
-func RunSQL(read goyze.FileReader, walk WalkDir, analyzers []SQLAnalyzer, roots []string) (goyze.Report, error) {
+// RunSQL finds every .sql file under the roots, drops the ones git ignores
+// (an ignored file is not the repository's owned surface — the same policy
+// the Go-package side applies, failing open when git cannot answer), and runs
+// the analyzers over each, returning the merged diagnostics. A walk or read
+// failure aborts the run.
+func RunSQL(
+	read goyze.FileReader,
+	walk WalkDir,
+	ignore CheckIgnore,
+	analyzers []SQLAnalyzer,
+	roots []string,
+) (goyze.Report, error) {
 	files, err := sqlFiles(walk, roots)
 	if err != nil {
 		return goyze.Report{}, err
 	}
+	files = keepTracked(ignore, files)
 	report := goyze.Report{}
 	for _, file := range files {
 		diags, err := analyzeSQLFile(read, analyzers, sqlPath(file))
