@@ -25,7 +25,7 @@ func TestLoadConfigParsesAnalyzerSettings(t *testing.T) {
 	}, settings)
 }
 
-func TestLoadConfigReportsReadError(t *testing.T) {
+func TestErrConfigReportsAnUnreadableFile(t *testing.T) {
 	read := func(string) ([]byte, error) { return nil, errs.Const("no file") }
 
 	_, err := yze.LoadConfig(read, "missing.yaml")
@@ -54,7 +54,7 @@ func TestApplySQLConfigIgnoresUnknownAnalyzerAndEmptyBlock(t *testing.T) {
 	}))
 }
 
-func TestLoadConfigReportsParseError(t *testing.T) {
+func TestErrConfigReportsAnUnparseableFile(t *testing.T) {
 	read := func(string) ([]byte, error) { return []byte("analyzers: [not a map"), nil }
 
 	_, err := yze.LoadConfig(read, "bad.yaml")
